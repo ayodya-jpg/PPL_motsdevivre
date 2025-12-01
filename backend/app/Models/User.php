@@ -21,6 +21,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role', // Pastikan 'role' juga ada di sini jika Anda menggunakannya
     ];
 
     /**
@@ -42,4 +43,11 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+
+    // --- TAMBAHKAN FUNGSI RELASI INI (LANGKAH NO. 3) ---
+    public function address()
+    {
+        // Definisikan relasi One-to-One ke model Address
+        return $this->hasOne(Address::class);
+    }
 }

@@ -51,4 +51,36 @@ class AuthController extends Controller
             'message' => 'Email atau Password salah'
         ], 401);
     }
+    public function register(Request $request)
+    {
+        // 1. Validasi Input
+        $validator = Validator::make($request->all(), [
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email', // Email tidak boleh kembar
+            'password' => 'required|min:6'
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Validasi gagal',
+                'errors' => $validator->errors()
+            ], 422);
+        }
+
+        // 2. Buat User Baru (Force role ke 'pelanggan' agar aman)
+        $user = \App\Models\User::create([
+            'name' => $request->name,
+            'email' => $request->email,
+            'password' => \Illuminate\Support\Facades\Hash::make($request->password),
+            'role' => 'pelanggan' // Default user baru selalu pelanggan
+        ]);
+
+        // 3. Return Success
+        return response()->json([
+            'success' => true,
+            'message' => 'Registrasi Berhasil! Silahkan Login.',
+            'data' => $user
+        ], 201);
+    }
 }

@@ -5,15 +5,10 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Product extends Model
+class Address extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'nama_produk',
-        'deskripsi',
-        'harga',
-        'stok',
-        'gambar'
+        'user_id', 'nama_penerima', 'no_hp', 'alamat_lengkap', 'kota', 'provinsi', 'kode_pos'
     ];
-    
 }

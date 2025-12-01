@@ -2,40 +2,61 @@
 
 namespace App\Controllers;
 
+use App\Controllers\BaseController;
+
 class Shop extends BaseController
 {
+    private $api_url = 'http://localhost:8000/api/products'; // Pastikan port API Laravel benar
+
+    // 1. HALAMAN KATALOG (PUBLIK - TIDAK PERLU LOGIN)
     public function index()
     {
-        // Ambil data produk (Sama seperti admin, sumbernya satu: API Laravel)
+        // Ambil data produk dari API Laravel
         $client = \Config\Services::curlrequest();
-        $apiUrl = 'http://localhost:8000/api/products';
 
         try {
-            $response = $client->get($apiUrl);
+            $response = $client->get($this->api_url);
             $body = json_decode($response->getBody());
             $products = $body->data;
         } catch (\Exception $e) {
-            $products = [];
+            $products = []; // Jika API mati, tampilkan array kosong
+        }
+
+        // Hitung jumlah keranjang HANYA JIKA user sudah login
+        // Jika tamu (belum login), cart_count otomatis 0
+        $cart_count = 0;
+        if (session()->get('is_logged_in')) {
+            $cart = session()->get('cart') ?? [];
+            $cart_count = count($cart);
         }
 
         $data = [
             'title' => 'Katalog Toko',
-            'products' => $products
+            'products' => $products,
+            'cart_count' => $cart_count
         ];
 
         return view('shop/index', $data);
     }
+
+    // 2. FUNGSI TAMBAH KE KERANJANG (PRIVATE - WAJIB LOGIN)
     public function add($id)
     {
-        // Ambil data produk detail dari API Laravel untuk memastikan harga valid
+        // --- CEK LOGIN ---
+        // Jika user belum login, lempar ke halaman Auth
+        if (!session()->get('is_logged_in')) {
+            return redirect()->to('/auth')->with('error', 'Silahkan login terlebih dahulu untuk mulai belanja.');
+        }
+
+        // --- PROSES TAMBAH KERANJANG ---
         $client = \Config\Services::curlrequest();
         
         try {
-            // Kita panggil API spesifik per ID (Laravel Resource support show/{id})
+            // Panggil API Laravel untuk detail produk
             $response = $client->get($this->api_url . '/' . $id);
             $body = json_decode($response->getBody());
             
-            // Karena resource Laravel biasanya membungkus dalam 'data'
+            // Ambil objek produk (handle wrapper 'data' resource Laravel)
             $product = $body->data ?? $body; 
 
             // Ambil keranjang lama dari session
@@ -64,9 +85,14 @@ class Shop extends BaseController
         }
     }
 
-    // 2. FUNGSI LIHAT KERANJANG
+    // 3. FUNGSI LIHAT KERANJANG (PRIVATE - Biasanya dilindungi Route Filter)
     public function cart()
     {
+        // Opsional: Cek login lagi disini agar lebih aman
+        if (!session()->get('is_logged_in')) {
+            return redirect()->to('/auth');
+        }
+
         $cart = session()->get('cart') ?? [];
         
         // Hitung Total Bayar
@@ -84,7 +110,7 @@ class Shop extends BaseController
         return view('shop/cart', $data);
     }
 
-    // 3. FUNGSI HAPUS DARI KERANJANG
+    // 4. FUNGSI HAPUS DARI KERANJANG
     public function remove($id)
     {
         $cart = session()->get('cart');
@@ -95,10 +121,28 @@ class Shop extends BaseController
         return redirect()->to('/cart');
     }
     
-    // 4. BERSIHKAN KERANJANG
+    // 5. BERSIHKAN KERANJANG
     public function clear()
     {
         session()->remove('cart');
         return redirect()->to('/shop');
+    }
+
+    // 6. About Toko
+    public function about()
+    {
+        // Tetap hitung keranjang agar header konsisten
+        $cart_count = 0;
+        if (session()->get('is_logged_in')) {
+            $cart = session()->get('cart') ?? [];
+            $cart_count = count($cart);
+        }
+
+        $data = [
+            'title' => 'About Me',
+            'cart_count' => $cart_count
+        ];
+
+        return view('shop/about', $data);
     }
 }

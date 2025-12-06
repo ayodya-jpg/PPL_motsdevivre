@@ -10,18 +10,18 @@ class Checkout extends BaseController
 
     public function index()
     {
-        // 1. Cek Login
+        // 1. Mengecek Login
         if (!session()->get('is_logged_in')) {
             return redirect()->to('/auth');
         }
 
-        // 2. Cek Keranjang Kosong
+        // 2. Mengecek Keranjang Kosong
         $cart = session()->get('cart') ?? [];
         if (empty($cart)) {
             return redirect()->to('/shop');
         }
 
-        // 3. Ambil Data User (Untuk Alamat)
+        // 3. Mengambil data user(Untuk Alamat)
         $client = \Config\Services::curlrequest();
         $userAddress = null;
         try {
@@ -29,7 +29,7 @@ class Checkout extends BaseController
             $response = $client->get($this->api_url_profile . '?user_id=' . $userId);
             $body = json_decode($response->getBody());
             
-            // Ambil objek alamat jika ada
+            // mengambil objek alamat jika ada
             if($body->success && isset($body->data->address)) {
                 $userAddress = $body->data->address;
             }
@@ -37,7 +37,7 @@ class Checkout extends BaseController
             $userAddress = null;
         }
 
-        // 4. Hitung Subtotal Belanja
+        // 4. Menghitung Subtotal Belanja
         $subtotal = 0;
         foreach($cart as $item) {
             $subtotal += $item['harga'] * $item['qty'];
@@ -55,7 +55,7 @@ class Checkout extends BaseController
 
     public function process()
     {
-        // 1. Ambil Input dari Form
+        // 1. Mengambil Input dari Form
         $shippingMethodRaw = $this->request->getPost('shipping_method'); // Format: "JNE|20000"
         $shippingEstimation = $this->request->getPost('shipping_estimation'); // Contoh: "3-4 Hari"
         $paymentMethod = $this->request->getPost('payment_method');

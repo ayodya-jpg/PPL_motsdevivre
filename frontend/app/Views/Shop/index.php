@@ -116,7 +116,96 @@
 
     <!-- DOUBLE HEADER WRAPPER -->
     <!-- bg-body-tertiary akan otomatis menyesuaikan warna (gelap/terang) berdasarkan tema -->
-    
+    <header class="double-header mb-4 shadow-sm bg-body-tertiary">
+        
+        <!-- BAGIAN 1: HEADER ATAS (Logo & Menu Navigasi) -->
+        <div class="header-top">
+            <div class="container d-flex justify-content-between align-items-center">
+                
+                <!-- Logo -->
+                <a class="navbar-brand fw-bold d-flex align-items-center text-decoration-none fs-4" href="/shop">
+                    <span class="bg-warning text-white rounded px-2 me-2 fs-5 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">VR</span> 
+                    <span class="text-body">Mots De Vivre</span>
+                </a>
+
+                <div class="d-flex align-items-center gap-3">
+                    <!-- Navigasi Ikon (Tengah/Kanan) -->
+                    <nav class="nav nav-custom d-none d-md-flex">
+                        <a class="nav-link active text-warning fw-bold" href="/shop">
+                        <i class="bi bi-house"></i> Home
+                        </a>
+                        
+                        <?php if (session()->get('is_logged_in')) : ?>
+                            <a class="nav-link position-relative text-body" href="/cart">
+                            <i class="bi bi-bag"></i></i> Cart
+                                <?php if(isset($cart_count) && $cart_count > 0): ?>
+                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
+                                        <?= $cart_count ?>
+                                    </span>
+                                <?php endif; ?>
+                            </a>
+                            <a class="nav-link text-body" href="/orders">
+                            <i class="bi bi-receipt"></i> Orders
+                            </a>
+                            <a class="nav-link text-body" href="/profile">
+                            <i class="bi bi-person-fill"></i> Profile
+                            </a>
+                        <?php else: ?>
+                            <a class="nav-link text-body" href="/about">
+                                <i class="bi bi-shop"></i> About Mots
+                            </a>
+                        <?php endif; ?>
+                    </nav>
+
+                    <!-- TOMBOL GANTI TEMA (Pojok Kanan) -->
+                    <button class="theme-toggle-btn" id="themeToggle" title="Ganti Tema">
+                        <i class="fas fa-sun" id="themeIcon"></i>
+                        <span class="d-none d-sm-inline" id="themeText">Light</span>
+                    </button>
+
+                    <!-- Mobile Menu Button -->
+                    <button class="btn btn-outline-secondary d-md-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Dropdown -->
+        <div class="collapse border-top border-secondary" id="mobileMenu">
+            <div class="container py-2">
+                <a href="/shop" class="d-block py-2 text-decoration-none text-body"><i class="fas fa-home me-2"></i> Home</a>
+                <a href="/cart" class="d-block py-2 text-decoration-none text-body"><i class="fas fa-shopping-cart me-2"></i> Cart</a>
+            </div>
+        </div>
+
+        <!-- BAGIAN 2: HEADER BAWAH (Search & Auth) -->
+        <div class="header-bottom bg-body">
+            <div class="container d-flex justify-content-between align-items-center">
+                
+                <!-- Search Box -->
+                <div class="flex-grow-1 me-4" style="max-width: 400px;">
+                    <form class="d-flex" role="search">
+                        <input class="form-control search-input" type="search" placeholder="Search..." aria-label="Search">
+                    </form>
+                </div>
+
+                <!-- Auth Buttons -->
+                <div class="d-flex align-items-center">
+                    <?php if (session()->get('is_logged_in')) : ?>
+                        <div class="text-body small me-3 d-none d-sm-block">
+                            Halo, <strong><?= esc(session()->get('name')) ?></strong>
+                        </div>
+                        <a href="/auth/logout" class="btn btn-danger btn-sm fw-bold">Logout</a>
+                    <?php else : ?>
+                        <a href="/auth" class="btn btn-outline-secondary btn-sm fw-bold me-2 px-3">Login</a>
+                        <a href="/register" class="btn btn-warning btn-sm fw-bold px-3">Sign-up</a>
+                    <?php endif; ?>
+                </div>
+
+            </div>
+        </div>
+    </header>
 
     <!-- CONTENT CONTAINER -->
     <div class="container pb-5">

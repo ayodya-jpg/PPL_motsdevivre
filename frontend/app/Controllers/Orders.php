@@ -5,6 +5,7 @@ namespace App\Controllers;
 class Orders extends BaseController
 {
     // Alamat API Laravel untuk minta riwayat pesanan
+    // Pastikan port 8000 benar (tempat Laravel berjalan)
     private $api_url = 'http://localhost:8000/api/orders/history';
 
     public function index()

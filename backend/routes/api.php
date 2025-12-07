@@ -21,6 +21,17 @@ Route::get('orders', [TransactionController::class, 'index']);
 Route::post('/login', [AuthController::class, 'login']);
 Route::post('/register', [AuthController::class, 'register']);
 
+//profile
+Route::get('/profile', [ProfileController::class, 'index']);
+Route::post('/profile/address', [ProfileController::class, 'updateAddress']);
+
+//history
+Route::get('/orders/history', [App\Http\Controllers\Api\TransactionController::class, 'history']);
+
+Route::get('/admin/orders', [App\Http\Controllers\Api\TransactionController::class, 'indexAdmin']);
+Route::get('/admin/orders/{id}', [App\Http\Controllers\Api\TransactionController::class, 'show']);
+Route::post('/admin/orders/{id}/status', [App\Http\Controllers\Api\TransactionController::class, 'updateStatus']);
+
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });

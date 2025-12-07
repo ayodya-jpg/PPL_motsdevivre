@@ -107,6 +107,38 @@
                         <th>Aksi</th>
                     </tr>
                 </thead>
+                <tbody>
+                    <?php if(!empty($products)): ?>
+                        <?php foreach ($products as $key => $item) : ?>
+                        <tr>
+                            <td><?= $key + 1 ?></td>
+                            <td>
+                                <?php if(!empty($item->gambar)): ?>
+                                    <img src="http://localhost:8000/storage/<?= $item->gambar ?>" class="thumb-img">
+                                <?php else: ?>
+                                    <span class="text-muted small">No IMG</span>
+                                <?php endif; ?>
+                            </td>
+                            <td class="fw-bold"><?= esc($item->nama_produk) ?></td>
+                            <td>Rp <?= number_format($item->harga, 0, ',', '.') ?></td>
+                            <td><?= $item->stok ?></td>
+                            <td>
+                                <?php 
+                                    if($item->stok == 0) echo '<span class="badge bg-danger">Habis</span>';
+                                    elseif($item->stok < 5) echo '<span class="badge bg-warning text-dark">Menipis</span>';
+                                    else echo '<span class="badge bg-success">Aman</span>';
+                                ?>
+                            </td>
+                            <td>
+                                <a href="/admin/products/edit/<?= $item->id ?>" class="btn btn-sm btn-warning text-dark me-1"><i class="fas fa-edit"></i></a>
+                                <a href="/admin/products/delete/<?= $item->id ?>" class="btn btn-sm btn-danger" onclick="return confirm('Hapus produk?')"><i class="fas fa-trash"></i></a>
+                            </td>
+                        </tr>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <tr><td colspan="7" class="text-center py-4">Tidak ada data produk.</td></tr>
+                    <?php endif; ?>
+                </tbody>
             </table>
         </div>
     </div>
@@ -138,6 +170,30 @@
                 <tbody>
                     <?php if(!empty($orders)): ?>
                         <?php foreach($orders as $order): ?>
+                        <tr>
+                            <td class="ps-4 fw-bold text-primary">#<?= $order->id ?></td>
+                            <td>
+                                <div class="fw-bold"><?= esc($order->user->name ?? 'Guest') ?></div>
+                                <small class="text-muted"><?= esc($order->user->email ?? '-') ?></small>
+                            </td>
+                            <td>
+                                <?= date('d M Y, H:i', strtotime($order->created_at)) ?>
+                            </td>
+                            <td class="fw-bold text-success">
+                                Rp <?= number_format($order->total_harga, 0, ',', '.') ?>
+                            </td>
+                            <td>
+                                <span class="badge badge-<?= strtolower($order->status) ?> text-uppercase px-3 py-2 rounded-pill">
+                                    <?= $order->status ?>
+                                </span>
+                            </td>
+                            <td class="text-end pe-4">
+                                <!-- TOMBOL DETAIL -->
+                                <a href="/admin/orders/show/<?= $order->id ?>" class="btn btn-sm btn-info text-white">
+                                    <i class="fas fa-eye me-1"></i> Detail
+                                </a>
+                            </td>
+                        </tr>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <tr>

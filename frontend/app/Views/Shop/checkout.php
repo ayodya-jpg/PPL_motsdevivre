@@ -18,12 +18,14 @@
         .checkout-card { border: 1px solid rgba(255,255,255,0.1); }
         [data-bs-theme="light"] .checkout-card { border: 1px solid rgba(0,0,0,0.1); }
         .cart-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+
         
         /* Style Estimasi */
         .estimation-box {
-            display: none; /* Sembunyi default */
+            display: none;
             margin-top: 10px;
             border-radius: 4px;
+
         }
     </style>
 </head>

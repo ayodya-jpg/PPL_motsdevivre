@@ -272,6 +272,7 @@
             if (theme === 'dark') { themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun'); } 
             else { themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon'); }
         }
+        
     </script>
 </body>
 </html>

@@ -112,7 +112,7 @@
 
         <div class="tab-content" id="orderTabsContent">
             
-            <!-- TAB 1: SEDANG BERJALAN -->
+            <!-- TAB 1: on going-->
             <div class="tab-pane fade show active" id="ongoing" role="tabpanel">
                 <?php if(empty($ongoing)): ?>
                     <div class="text-center py-5 opacity-75">

@@ -33,32 +33,27 @@ class DatabaseSeeder extends Seeder
         // 3. Buat Produk Dummy
         DB::table('products')->insert([
             [
-                'nama_produk' => 'Laptop Gaming ASUS',
-                'deskripsi' => 'Laptop spek tinggi untuk gaming dan kerja berat.',
-                'harga' => 15000000,
+                'nama_produk' => 'Mots De Vivre-radiant Blis',
+                'deskripsi' => 'parfum unisex
+                cocok untuk kegiatan outdoor
+                ketika terkena keringat, aroma parfum lebih keluar',
+                'harga' => 114000,
                 'stok' => 10,
-                'gambar' => 'laptop.jpg', // Nanti kita urus gambar
+                'gambar' => 'images/radiant_bliss.jpeg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
-                'nama_produk' => 'Mouse Wireless Logitech',
-                'deskripsi' => 'Mouse tanpa kabel, baterai awet.',
-                'harga' => 150000,
+                'nama_produk' => 'Mots De Vivre - Secret Desire',
+                'deskripsi' => 'parfum unisex
+                cocok untuk kegiatan formal (undangan nikahan, dll)
+                manis',
+                'harga' => 114000,
                 'stok' => 50,
-                'gambar' => 'mouse.jpg',
+                'gambar' => 'images/Secret_desire.jpeg',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
-            [
-                'nama_produk' => 'Keyboard Mechanical',
-                'deskripsi' => 'Keyboard enak buat ngetik koding.',
-                'harga' => 500000,
-                'stok' => 20,
-                'gambar' => 'keyboard.jpg',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ]
         ]);
     }
 }

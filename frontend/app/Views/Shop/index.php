@@ -275,6 +275,7 @@
                                 <a href="/shop/add/<?= $item->id ?>" class="btn btn-success w-100 fw-bold">
                                     <i class="fas fa-cart-plus me-2"></i> Beli Sekarang
                                 </a>
+                                <!-- btnbeli -->
                             <?php else: ?>
                                 <button class="btn btn-secondary w-100" disabled>Stok Habis</button>
                             <?php endif; ?>

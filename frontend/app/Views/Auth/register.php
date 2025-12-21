@@ -1,53 +1,91 @@
 <!DOCTYPE html>
-<html>
+<html lang="id" data-bs-theme="dark">
 <head>
-    <title>Register</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Daftar Akun Baru</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
     <style>
-        body { font-family: sans-serif; display: flex; justify-content: center; align-items: center; height: 100vh; background-color: #f4f4f4; }
-        .login-container { background: white; padding: 30px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); width: 350px; }
-        .form-group { margin-bottom: 15px; }
-        .form-group label { display: block; margin-bottom: 5px; }
-        .form-group input { width: 100%; padding: 8px; box-sizing: border-box; border: 1px solid #ddd; border-radius: 4px; }
-        .btn-register { width: 100%; padding: 10px; background: #28a745; color: white; border: none; border-radius: 4px; cursor: pointer; }
-        .btn-register:hover { background: #218838; }
-        .error { color: red; font-size: 14px; margin-bottom: 10px; }
-        .link-login { text-align: center; margin-top: 15px; font-size: 14px; }
+        body { 
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--bs-body-bg);
+            transition: background-color 0.3s;
+        }
+        .register-card {
+            width: 100%;
+            max-width: 400px;
+            border: none;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <h2 style="text-align: center;">Register</h2>
-        
-        <?php if (session()->getFlashdata('error')) : ?>
-            <div class="error"><?= session()->getFlashdata('error') ?></div>
-            <?php if(session()->getFlashdata('errors_list')): ?>
-                <ul style="color: red; font-size: 12px; padding-left: 15px;">
-                    <?php foreach(session()->getFlashdata('errors_list') as $err): ?>
-                        <li><?= is_array($err) ? implode(', ', $err) : $err ?></li>
-                    <?php endforeach; ?>
-                </ul>
-            <?php endif; ?>
-        <?php endif; ?>
 
-        <form action="/auth/registerProcess" method="post">
-            <div class="form-group">
-                <label>Fullname</label>
-                <input type="text" name="name" required value="<?= old('name') ?>">
-            </div>
-            <div class="form-group">
-                <label>Email</label>
-                <input type="email" name="email" required value="<?= old('email') ?>">
-            </div>
-            <div class="form-group">
-                <label>Password</label>
-                <input type="password" name="password" required>
-            </div>
-            <button type="submit" class="btn-register">Register Now</button>
-        </form>
+    <div class="container">
+        <div class="d-flex justify-content-center">
+            <div class="card register-card p-4">
+                <div class="card-body">
+                    <h2 class="text-center fw-bold mb-2">Daftar Akun</h2>
+                    <p class="text-center text-muted small mb-4">Bergabunglah bersama kami sekarang</p>
 
-        <div class="link-login">
-            Have An Account? <a href="/auth">Login Here</a>
+                    <!-- Pesan Error -->
+                    <?php if (session()->getFlashdata('error')) : ?>
+                        <div class="alert alert-danger py-2 small">
+                            <?= session()->getFlashdata('error') ?>
+                            <?php if(session()->getFlashdata('errors_list')): ?>
+                                <ul class="mb-0 ps-3 mt-1">
+                                    <?php foreach(session()->getFlashdata('errors_list') as $err): ?>
+                                        <li><?= is_array($err) ? implode(', ', $err) : $err ?></li>
+                                    <?php endforeach; ?>
+                                </ul>
+                            <?php endif; ?>
+                        </div>
+                    <?php endif; ?>
+
+                    <form action="/auth/registerProcess" method="post">
+                        
+                        <!-- LOGIKA PROMO (INPUT HIDDEN) -->
+                        <input type="hidden" name="promo_code" value="<?= esc($promo_code ?? '') ?>">
+                        
+                        <!-- Tampilkan Info Jika Ada Promo -->
+                        <?php if(!empty($promo_code)): ?>
+                            <div class="alert alert-success d-flex align-items-center py-2 mb-3 small" role="alert">
+                                <i class="fas fa-gift me-2 fs-5"></i>
+                                <div>
+                                    <strong>Promo Diaktifkan!</strong><br>
+                                    Anda akan mendapatkan Gratis Ongkir & Diskon.
+                                </div>
+                            </div>
+                        <?php endif; ?>
+
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small">Nama Lengkap</label>
+                            <input type="text" class="form-control" name="name" required value="<?= old('name') ?>" placeholder="Nama Anda">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-bold small">Email</label>
+                            <input type="email" class="form-control" name="email" required value="<?= old('email') ?>" placeholder="email@contoh.com">
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small">Password</label>
+                            <input type="password" class="form-control" name="password" required placeholder="Minimal 6 karakter">
+                        </div>
+                        
+                        <button type="submit" class="btn btn-success w-100 py-2 fw-bold">Daftar Sekarang</button>
+                    </form>
+
+                    <div class="text-center mt-4 small">
+                        Sudah punya akun? <a href="/auth" class="text-decoration-none fw-bold">Login disini</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
+
 </body>
 </html>

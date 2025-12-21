@@ -80,7 +80,13 @@ class Auth extends BaseController
         if (session()->get('is_logged_in')) {
             return redirect()->to('/shop');
         }
-        return view('auth/register');
+
+        // --- UPDATE (Langkah 1): Tangkap Promo Code dari URL ---
+        // Contoh URL: /register?promo=NEWUSER20_FREESHIP
+        $promoCode = $this->request->getGet('promo');
+
+        // Kirim variabel promo_code ke View Register
+        return view('auth/register', ['promo_code' => $promoCode]);
     }
 
     // Proses Register ke API Laravel
@@ -90,11 +96,13 @@ class Auth extends BaseController
         $apiUrl = 'http://localhost:8000/api/register';
 
         try {
+            // --- UPDATE (Langkah 3): Kirim Promo Code ke Backend ---
             $response = $client->post($apiUrl, [
                 'form_params' => [
                     'name' => $this->request->getPost('name'),
                     'email' => $this->request->getPost('email'),
-                    'password' => $this->request->getPost('password')
+                    'password' => $this->request->getPost('password'),
+                    'promo_code' => $this->request->getPost('promo_code') // Pastikan view mengirim ini
                 ],
                 'http_errors' => false // Supaya kita bisa tangkap error 422
             ]);

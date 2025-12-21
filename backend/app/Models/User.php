@@ -21,7 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // Pastikan 'role' juga ada di sini jika Anda menggunakannya
+        'role',        // Pastikan ini ada
+        'promo_code',  // <--- WAJIB DITAMBAHKAN AGAR PROMO TERSIMPAN
     ];
 
     /**
@@ -44,10 +45,9 @@ class User extends Authenticatable
         'password' => 'hashed',
     ];
 
-    // --- TAMBAHKAN FUNGSI RELASI INI (LANGKAH NO. 3) ---
+    // Relasi ke Alamat
     public function address()
     {
-        // Definisikan relasi One-to-One ke model Address
         return $this->hasOne(Address::class);
     }
 }

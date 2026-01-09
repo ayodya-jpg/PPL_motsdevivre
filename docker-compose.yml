@@ -2,9 +2,9 @@ version: "3.8"
 
 services:
   # Database MySQL
-  db: 
+  db:
     image: mysql:8.0
-    container_name: eggshop_db
+    container_name: motsdevivre_db
     restart: unless-stopped
     environment:
       MYSQL_ROOT_PASSWORD: root
@@ -79,7 +79,7 @@ services:
   # phpMyAdmin
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
-    container_name: eggshop_phpmyadmin
+    container_name: motsdevivre_phpmyadmin
     restart: unless-stopped
     ports:
       - "8092:80"

@@ -22,7 +22,7 @@ class ProductController extends Controller
         return response()->json(['success' => true, 'data' => $product], 200);
     }
 
-    // SIMPAN PRODUK BARU
+    // SIMPAN PRODUK BARUU
     public function store(Request $request)
     {
         $validator = Validator::make($request->all(), [

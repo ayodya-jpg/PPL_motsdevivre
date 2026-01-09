@@ -13,7 +13,7 @@ class CheckoutController extends Controller
     public function pay(Request $request)
     {
         try {
-            // Log untuk debug (Fitur Asli)
+            // Log untuk debug (Fitur Asli))
             Log::info('Checkout pay request', $request->all());
 
             // Validasi input (Ditambahkan user_id & promo_codes agar tidak error)

@@ -25,6 +25,46 @@
             transition: all 0.3s ease;
         }
 
+        /* --- CAROUSEL BANNER STABIL --- */
+        .carousel-banner {
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: var(--card-shadow);
+        }
+
+        .carousel-item {
+            /* Pastikan item carousel punya tinggi fixed agar tidak loncat */
+            height: 400px;
+            background-color: #000; /* Fallback color */
+        }
+
+        .carousel-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Gambar akan di-crop proporsional */
+            object-position: center;
+            filter: brightness(0.85);
+        }
+
+        .carousel-caption h5 {
+            font-weight: 800;
+            font-size: 2rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+        }
+
+        /* Responsif untuk Mobile */
+        @media (max-width: 768px) {
+            .carousel-item {
+                height: 200px; /* Tinggi stabil di HP */
+            }
+            .carousel-caption h5 {
+                font-size: 1.2rem;
+            }
+            .carousel-caption p {
+                font-size: 0.9rem;
+            }
+        }
+
         /* --- MODERN NAVIGATION --- */
         .double-header {
             background: rgba(255, 255, 255, 0.8) !important;
@@ -63,7 +103,7 @@
             background: #f1f5f9;
         }
 
-        /* --- PRODUCT CARDS --- */
+        /* --- PRODUCT CARDS (AGAR SELARAS) --- */
         .card { 
             border: none;
             border-radius: 24px;
@@ -71,6 +111,9 @@
             background: #ffffff;
             transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
             box-shadow: var(--card-shadow);
+            display: flex;
+            flex-direction: column;
+            height: 100%; /* Wajib full height */
         }
         
         .card:hover { 
@@ -79,17 +122,34 @@
         }
 
         .product-img {
-            height: 220px;
+            height: 220px; /* Tinggi gambar fix */
+            width: 100%;
             object-fit: cover;
             transition: transform 0.5s ease;
         }
 
         .card:hover .product-img { transform: scale(1.1); }
 
+        .card-body {
+            flex-grow: 1; /* Agar body mengisi ruang kosong, mendorong footer ke bawah */
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Trik agar deskripsi selalu sama tinggi (max 2 baris) */
+        .text-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            height: 2.6em; /* Cadangan height jika browser jadul */
+        }
+
         .price-text {
             color: var(--primary-slate);
             font-weight: 800;
             font-size: 1.25rem;
+            margin-top: auto; /* Mendorong harga ke bawah area body */
         }
 
         .btn-success {
@@ -207,12 +267,45 @@
     </div>
 
     <div class="container pb-5 mt-4">
+    
+    <div id="promoCarousel" class="carousel slide carousel-banner" data-bs-ride="carousel">
+            <div class="carousel-indicators">
+                <button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                <button type="button" data-bs-target="#promoCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+            </div>
+            <div class="carousel-inner">
+                <div class="carousel-item active" data-bs-interval="5000">
+                    <img src="<?= base_url('images/Radiant-Bliss.jpeg') ?>" class="d-block w-100 carousel-img" alt="Radiant Bliss">
+                    <div class="carousel-caption d-none d-md-block text-start top-50 translate-middle-y">
+                        <h5 class="display-6 text-warning">New Arrival</h5>
+                        <p class="fs-5 text-white">Temukan aroma terbaru musim ini.</p>
+                        <a href="#produk-list" class="btn btn-light rounded-pill fw-bold px-4 mt-2">Lihat Produk</a>
+                    </div>
+                </div>
+                <div class="carousel-item" data-bs-interval="5000">
+                    <img src="<?= base_url('images/Secret-Desire.jpeg') ?>" class="d-block w-100 carousel-img" alt="Secret Desire">
+                    <div class="carousel-caption d-none d-md-block text-start top-50 translate-middle-y">
+                        <h5 class="display-6 text-warning">Best Seller</h5>
+                        <p class="fs-5 text-white">Wangi memikat sepanjang hari.</p>
+                        <a href="#produk-list" class="btn btn-light rounded-pill fw-bold px-4 mt-2">Lihat Produk</a>
+                    </div>
+                </div>
+            </div>
+            <button class="carousel-control-prev" type="button" data-bs-target="#promoCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next" type="button" data-bs-target="#promoCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
 
         <?php if (session()->getFlashdata('success')) : ?>
-            <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4"><i class="bi bi-check-circle me-2"></i> <?= session()->getFlashdata('success') ?></div>
+            <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4 mt-4"><i class="bi bi-check-circle me-2"></i> <?= session()->getFlashdata('success') ?></div>
         <?php endif; ?>
 
-        <div class="d-flex justify-content-between align-items-center mb-4 pt-3">
+        <div class="d-flex justify-content-between align-items-center mb-4 pt-4" id="produk-list">
             <h3 class="fw-800 m-0">Produk Pilihan</h3>
             <div class="text-muted small">Pilih parfum sesuai pribadimu</div>
         </div>
@@ -226,7 +319,7 @@
                             <?php if(!empty($item->gambar)): ?>
                                 <img src="http://localhost:8090/storage/<?= $item->gambar ?>" class="product-img w-100" alt="Produk">
                             <?php else: ?>
-                                <div class="img-placeholder bg-light d-flex align-items-center justify-content-center" style="height:220px;"><i class="fa can-spray fa-3x text-muted opacity-25"></i></div>
+                                <div class="img-placeholder bg-light d-flex align-items-center justify-content-center" style="height:220px;"><i class="fas fa-spray-can fa-3x text-muted opacity-25"></i></div>
                             <?php endif; ?>
 
                             <?php if($item->stok < 5 && $item->stok > 0): ?>
@@ -237,9 +330,11 @@
                         </div>
 
                         <div class="card-body p-4">
-                            <h6 class="fw-bold mb-1 text-truncate"><?= esc($item->nama_produk) ?></h6>
-                            <p class="text-muted small mb-3"><?= substr(esc($item->deskripsi), 0, 40) ?>...</p>
-                            <div class="price-text text-primary">Rp <?= number_format($item->harga, 0, ',', '.') ?></div>
+                            <h6 class="fw-bold mb-2 text-truncate"><?= esc($item->nama_produk) ?></h6>
+                            
+                            <p class="text-muted small mb-3 text-clamp-2"><?= esc($item->deskripsi) ?></p>
+                            
+                            <div class="price-text text-primary mt-auto">Rp <?= number_format($item->harga, 0, ',', '.') ?></div>
                         </div>
 
                         <div class="card-footer bg-transparent border-0 p-4 pt-0">

@@ -6,6 +6,7 @@ use App\Controllers\BaseController;
 
 class Checkout extends BaseController
 {
+    // ✅ URL API Backend (Gunakan IP Wifi Anda yang sudah berhasil sebelumnya)
     // Pastikan IP ini sama dengan yang ada di Shop.php agar konsisten
     protected $api_base_url = 'http://192.168.18.71:8090/api'; 
 

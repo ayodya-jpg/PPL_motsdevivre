@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-IoyLJLDukf-pHuqF"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-K-0can14kqPvOh0f"></script>
 
     <style>
         :root { --primary-slate: #0f172a; --accent-amber: #fbbf24; --bg-light: #f8fafc; --card-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.08); }

@@ -1,203 +1,271 @@
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="dark">
+<html lang="id" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title) ?></title>
     
-    <!-- CSS Dependencies -->
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+
     <style>
-        body { transition: background-color 0.3s, color 0.3s; }
-        
-        /* --- STYLE HEADER (Sama dengan Index/About) --- */
-        .nav-custom .nav-link { font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; padding: 0.5rem 1rem; opacity: 0.7; }
-        .nav-custom .nav-link:hover, .nav-custom .nav-link.active { opacity: 1; }
-        .nav-custom .nav-link i { font-size: 1.2rem; margin-bottom: 4px; }
-        
-        .search-input { border: 1px solid rgba(255,255,255,0.2); }
-        [data-bs-theme="light"] .search-input { border: 1px solid #ced4da; background-color: #fff; color: #212529; }
-        [data-bs-theme="dark"] .search-input { background-color: #2b3035; color: #fff; border-color: #495057; }
-        
-        /* --- STYLE KHUSUS CART --- */
-        .cart-img {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 6px;
-            border: 1px solid rgba(128,128,128,0.2);
+        :root {
+            --primary-slate: #0f172a;
+            --accent-amber: #fbbf24;
+            --bg-light: #f8fafc;
+            --card-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.08);
         }
-        .table-custom th { background-color: rgba(13, 110, 253, 0.1); }
-        
-        /* Agar align middle semua isi tabel */
-        .table > :not(caption) > * > * { vertical-align: middle; }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--primary-slate);
+            transition: all 0.3s ease;
+        }
+
+        /* --- MODERN NAVIGATION (Sama dengan Index) --- */
+        .double-header {
+            background: rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .brand-logo {
+            background: var(--primary-slate);
+            color: var(--accent-amber) !important;
+            width: 40px;
+            height: 40px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+        }
+
+        .nav-custom .nav-link {
+            font-weight: 600;
+            color: #64748b !important;
+            padding: 0.5rem 1.2rem;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .nav-custom .nav-link:hover, .nav-custom .nav-link.active {
+            color: var(--primary-slate) !important;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* --- CART COMPONENTS --- */
+        .cart-item-card {
+            border: none;
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: var(--card-shadow);
+            transition: transform 0.3s ease;
+        }
+
+        .cart-item-card:hover {
+            transform: scale(1.01);
+        }
+
+        .product-thumb {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 18px;
+        }
+
+        .summary-card {
+            border: none;
+            border-radius: 28px;
+            background: var(--primary-slate);
+            color: white;
+            padding: 30px;
+            position: sticky;
+            top: 150px;
+        }
+
+        .btn-checkout {
+            background: var(--accent-amber);
+            color: var(--primary-slate);
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            font-weight: 800;
+            width: 100%;
+            transition: all 0.3s;
+        }
+
+        .btn-checkout:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.3);
+            background: #f59e0b;
+        }
+
+        .theme-toggle-btn {
+            background: #f1f5f9;
+            border: none;
+            padding: 10px 18px;
+            border-radius: 14px;
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-light: #0f172a;
+            --primary-slate: #f8fafc;
+        }
+        [data-bs-theme="dark"] .cart-item-card { background: #1e293b; }
+        [data-bs-theme="dark"] .double-header { background: rgba(15, 23, 42, 0.9) !important; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER (Konsisten) -->
-    <header class="mb-4 shadow-sm bg-body-tertiary">
-        <div class="header-top py-2 border-bottom border-secondary border-opacity-25">
+    <header class="double-header sticky-top mb-5">
+        <div class="header-top py-3">
             <div class="container d-flex justify-content-between align-items-center">
-                <a class="navbar-brand fw-bold d-flex align-items-center text-decoration-none fs-4" href="/shop">
-                    <span class="bg-warning text-white rounded px-2 me-2 fs-5 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">VR</span> 
-                    <span class="text-body">Mots De Vivre</span>
+                <a class="navbar-brand fw-bolder d-flex align-items-center text-decoration-none fs-4" href="/shop">
+                    <div class="brand-logo me-2">DV</div> 
+                    <span class="text-body tracking-tighter">Mots De Vivre</span>
                 </a>
-                <div class="d-flex align-items-center gap-3">
-                    <nav class="nav nav-custom d-none d-md-flex">
-                        <a class="nav-link text-body" href="/shop"> <i class="bi bi-house"></i> Home</a>
-                        <?php if (session()->get('is_logged_in')) : ?>
-                            <!-- Cart Aktif -->
-                            <a class="nav-link active text-warning fw-bold position-relative" href="/cart">
-                                 <i class="bi bi-bag"></i></i> Cart
-                                <?php 
-                                    $cart_count = 0;
-                                    if(session()->get('cart')) $cart_count = count(session()->get('cart'));
-                                ?>
-                                <?php if($cart_count > 0): ?>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;"><?= $cart_count ?></span>
-                                <?php endif; ?>
-                            </a>
-                            <a class="nav-link text-body" href="/orders"><i class="bi bi-receipt"></i> Orders</a>
-                            <a class="nav-link text-body" href="/profile"><i class="bi bi-person-fill"></i> Profile</a>
-                        <?php endif; ?>
+
+                <div class="d-flex align-items-center gap-2">
+                    <nav class="nav nav-custom d-none d-lg-flex me-3">
+                        <a class="nav-link" href="/shop">Home</a>
+                        <a class="nav-link active" href="/cart">Cart</a>
+                        <a class="nav-link" href="/orders">Orders</a>
+                        <a class="nav-link" href="/profile">Profile</a>
                     </nav>
 
-                    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" id="themeToggle">
+                    <button class="theme-toggle-btn" id="themeToggle">
                         <i class="fas fa-sun" id="themeIcon"></i>
+                    </button>
+                    
+                    <button class="btn btn-outline-secondary border-0 d-lg-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
+                        <i class="fas fa-bars"></i>
                     </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- KONTEN KERANJANG -->
-    <div class="container pb-5">
-        <h2 class="mb-4 fw-bold border-bottom pb-2"><i class="bi bi-cart3 me-2"></i> Keranjang Belanja</h2>
+    <div class="collapse border-top border-secondary bg-body shadow-sm d-lg-none sticky-top" id="mobileMenu" style="top: 80px; z-index: 1040;">
+        <div class="container py-3">
+            <a href="/shop" class="d-block py-2 text-decoration-none text-body fw-bold">Home</a>
+            <a href="/cart" class="d-block py-2 text-decoration-none text-warning fw-bold">Cart</a>
+            <a href="/orders" class="d-block py-2 text-decoration-none text-body">Orders</a>
+            <a href="/profile" class="d-block py-2 text-decoration-none text-body">Profile</a>
+        </div>
+    </div>
 
-        <?php if(empty($cart)): ?>
-            <!-- Tampilan Jika Keranjang Kosong -->
-            <div class="card border-0 shadow-sm text-center py-5">
-                <div class="card-body">
-                    <i class="bi bi-cart-x text-muted" style="font-size: 5rem;"></i>
-                    <h3 class="mt-3">Keranjang Anda Kosong</h3>
-                    <p class="text-muted">Sepertinya Anda belum memilih produk apapun.</p>
-                    <a href="/shop" class="btn btn-primary px-4 mt-2">
-                        <i class="fas fa-arrow-left me-2"></i> Mulai Belanja
-                    </a>
-                </div>
+    <div class="container pb-5">
+        <div class="d-flex align-items-center gap-3 mb-4">
+            <a href="/shop" class="btn btn-light rounded-circle p-2"><i class="bi bi-arrow-left fs-5"></i></a>
+            <h3 class="fw-800 m-0">Keranjang Belanja</h3>
+        </div>
+
+        <?php if (empty($cart)): ?>
+            <div class="text-center py-5">
+                <img src="https://illustrations.popsy.co/slate/shopping-cart.svg" style="width:250px" class="mb-4" alt="Empty Cart">
+                <h4 class="fw-bold">Wah, keranjangmu kosong!</h4>
+                <p class="text-muted mb-4">Yuk, isi dengan parfum premium kami.</p>
+                <a href="/shop" class="btn btn-dark rounded-pill px-5 py-3 fw-bold">Mulai Belanja</a>
             </div>
         <?php else: ?>
-            <!-- Tabel Keranjang -->
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-custom mb-0">
-                            <thead class="bg-gray text-white">
-                                <tr>
-                                    <th class="ps-4">Produk</th>
-                                    <th>Harga</th>
-                                    <th class="text-center">Qty</th>
-                                    <th>Subtotal</th>
-                                    <th class="text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <?php foreach($cart as $id => $item): ?>
-                                <tr>
-                                    <td class="ps-4">
-                                        <div class="d-flex align-items-center">
-                                            <!-- Gambar Produk -->
-                                            <?php if(!empty($item['gambar'])): ?>
-                                                <img src="http://localhost:8000/storage/<?= $item['gambar'] ?>" class="cart-img me-3" alt="Produk">
-                                            <?php else: ?>
-                                                <div class="cart-img me-3 bg-secondary d-flex align-items-center justify-content-center text-white">
-                                                    <i class="fas fa-image"></i>
-                                                </div>
-                                            <?php endif; ?>
-                                            
-                                            <div>
-                                                <h6 class="mb-0 fw-bold"><?= esc($item['nama']) ?></h6>
-                                                <!-- <small class="text-muted">ID: <?= $item['id'] ?></small> -->
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td>Rp <?= number_format($item['harga'], 0, ',', '.') ?></td>
-                                    <td class="text-center">
-                                        <span class="badge bg-secondary px-3 py-2"><?= $item['qty'] ?></span>
-                                    </td>
-                                    <td class="fw-bold text-body">
-                                        Rp <?= number_format($item['harga'] * $item['qty'], 0, ',', '.') ?>
-                                    </td>
-                                    <td class="text-center">
-                                        <a href="/shop/remove/<?= $id ?>" class="btn btn-outline-danger btn-sm rounded-circle" onclick="return confirm('Hapus produk ini?')" title="Hapus">
-                                            <i class="fas fa-trash-alt"></i>
-                                        </a>
-                                    </td>
-                                </tr>
-                                <?php endforeach; ?>
-                            </tbody>
-                            <tfoot class="bg-secondary">
-                                <tr>
-                                    <td colspan="3" class="text-end py-3"><strong>Total Pembayaran:</strong></td>
-                                    <td colspan="2" class="py-3">
-                                        <h4 class="mb-0 fw-bold text-warning">Rp <?= number_format($total, 0, ',', '.') ?></h4>
-                                    </td>
-                                </tr>
-                            </tfoot>
-                        </table>
+            <div class="row g-4">
+                <div class="col-lg-8">
+                    <?php foreach ($cart as $id => $item): ?>
+                        <div class="cart-item-card p-4 mb-3">
+                            <div class="d-flex align-items-center gap-4 flex-wrap flex-md-nowrap">
+                                <div class="bg-light rounded-4 d-flex align-items-center justify-content-center" style="min-width: 100px; height: 100px;">
+                                    <i class="fas fa-egg text-muted opacity-50 fs-2"></i>
+                                </div>
+                                
+                                <div class="flex-grow-1">
+                                    <h5 class="fw-bold mb-1"><?= esc($item['nama']) ?></h5>
+                                    <p class="text-muted small mb-0">Harga: Rp <?= number_format($item['harga'], 0, ',', '.') ?></p>
+                                </div>
+
+                                <div class="d-flex align-items-center gap-3 bg-light rounded-pill px-3 py-2">
+                                    <span class="text-muted small">Qty:</span>
+                                    <span class="fw-black"><?= $item['qty'] ?></span>
+                                </div>
+
+                                <div class="text-md-end" style="min-width: 150px;">
+                                    <div class="text-muted small mb-1">Subtotal</div>
+                                    <div class="fw-bold fs-5">Rp <?= number_format($item['harga'] * $item['qty'], 0, ',', '.') ?></div>
+                                </div>
+
+                                <a href="/shop/remove/<?= $id ?>" class="btn btn-outline-danger border-0 rounded-circle p-2" onclick="return confirm('Hapus produk ini?')">
+                                    <i class="bi bi-trash3-fill"></i>
+                                </a>
+                            </div>
+                        </div>
+                    <?php endforeach; ?>
+
+                    <div class="mt-4">
+                        <a href="/shop/clear" class="btn btn-link text-danger text-decoration-none fw-bold" onclick="return confirm('Kosongkan keranjang?')">
+                            <i class="bi bi-x-circle me-1"></i> Kosongkan Keranjang
+                        </a>
                     </div>
                 </div>
-                
-                <!-- Tombol Aksi Bawah -->
-                <div class="card-footer bg-transparent py-3">
-                    <div class="d-flex justify-content-between align-items-center flex-wrap gap-2">
-                        <div>
-                            <a href="/shop" class="btn btn-outline-secondary">
-                                <i class="fas fa-arrow-left me-2"></i> Lanjut Belanja
-                            </a>
-                            <a href="/shop/clear" class="btn btn-outline-danger ms-2" onclick="return confirm('Yakin ingin mengosongkan keranjang?')">
-                                <i class="fas fa-trash me-2"></i> Kosongkan
-                            </a>
+
+                <div class="col-lg-4">
+                    <div class="summary-card shadow-lg">
+                        <h5 class="fw-bold mb-4">Ringkasan Pesanan</h5>
+                        
+                        <div class="d-flex justify-content-between mb-3 opacity-75">
+                            <span>Total Item</span>
+                            <span><?= count($cart) ?> Produk</span>
                         </div>
                         
-                        <a href="/checkout" class="btn btn-success btn-lg px-5 fw-bold shadow-sm">
-                            Checkout <i class="fas fa-arrow-right ms-2"></i>
+                        <div class="d-flex justify-content-between mb-3 opacity-75">
+                            <span>Biaya Pengiriman</span>
+                            <span class="text-success fw-bold">Gratis</span>
+                        </div>
+                        
+                        <hr class="my-4 opacity-25">
+                        
+                        <div class="d-flex justify-content-between align-items-end mb-4">
+                            <span class="fs-6 opacity-75">Total Bayar</span>
+                            <span class="fs-3 fw-black text-amber" style="color: var(--accent-amber);">Rp <?= number_format($total, 0, ',', '.') ?></span>
+                        </div>
+
+                        <a href="#" class="btn btn-checkout text-uppercase tracking-wider" id="checkoutBtn">
+                        Lanjut ke Pembayaran <i class="bi bi-arrow-right ms-2"></i>
                         </a>
+                        
+                        <div class="mt-4 text-center">
+                            <p class="small opacity-50 mb-0"><i class="bi bi-shield-check me-1"></i> Pembayaran Aman & Terenkripsi</p>
+                        </div>
                     </div>
                 </div>
             </div>
         <?php endif; ?>
     </div>
 
-    <!-- Script Tema (Sama dengan Index) -->
     <script>
-        const themeToggleBtn = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const htmlElement = document.documentElement;
-        
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(currentTheme);
+    // Dark Mode Logic
+    const themeToggleBtn = document.getElementById('themeToggle');
+    const themeIcon = document.getElementById('themeIcon');
+    
+    themeToggleBtn.addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+        const newTheme = isDark ? 'light' : 'dark';
+        document.documentElement.setAttribute('data-bs-theme', newTheme);
+        themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+        localStorage.setItem('theme', newTheme);
+    });
 
-        themeToggleBtn.addEventListener('click', () => {
-            const newTheme = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            setTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
+    const savedTheme = localStorage.getItem('theme') || 'light';
+    document.documentElement.setAttribute('data-bs-theme', savedTheme);
+    themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
 
-        function setTheme(theme) {
-            htmlElement.setAttribute('data-bs-theme', theme);
-            if (theme === 'dark') {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-        }
-    </script>
+    // ✅ DIRECT CHECKOUT - SESSION SUDAH ADA!
+    document.getElementById('checkoutBtn').addEventListener('click', function(e) {
+        e.preventDefault();
+        window.location.href = '/checkout';
+    });
+</script>
 </body>
 </html>

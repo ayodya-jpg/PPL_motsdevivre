@@ -8,46 +8,46 @@ use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 
+// TAMBAHKAN IMPORT MODEL DI SINI
+use App\Models\Address;
+use App\Models\Subscription;
+
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
-     */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'role',        // Pastikan ini ada
-        'promo_code',  // <--- WAJIB DITAMBAHKAN AGAR PROMO TERSIMPAN
+        'google_id'
     ];
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * The attributes that should be cast.
-     *
-     * @var array<string, string>
-     */
     protected $casts = [
         'email_verified_at' => 'datetime',
-        'password' => 'hashed',
+        'password'          => 'hashed',
     ];
 
-    // Relasi ke Alamat
     public function address()
     {
+        // relasi One-to-One ke model Address
         return $this->hasOne(Address::class);
     }
+
+    public function subscriptions()
+    {
+        return $this->hasMany(Subscription::class);
+    }
+
+    public function activeSubscription()
+{
+    return $this->hasOne(Subscription::class)
+        ->where('status', 'active');
+}
+
 }

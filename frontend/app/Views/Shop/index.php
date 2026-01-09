@@ -1,391 +1,383 @@
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="dark">
+<html lang="id" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title) ?></title>
     
-    <!-- CSS Dependencies -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
-    <!-- Google Font (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            --card-bg-light: #ffffff;
-            --card-bg-dark: #212529;
+            --primary-slate: #0f172a;
+            --accent-amber: #fbbf24;
+            --bg-light: #f8fafc;
+            --card-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.08);
         }
 
         body { 
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-            background-color: var(--bs-tertiary-bg);
-        }
-
-        /* --- HEADER STYLE --- */
-        .nav-custom .nav-link { font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; padding: 0.5rem 1rem; opacity: 0.7; transition: 0.2s; }
-        .nav-custom .nav-link:hover, .nav-custom .nav-link.active { opacity: 1; transform: translateY(-2px); }
-        .nav-custom .nav-link i { font-size: 1.3rem; margin-bottom: 4px; }
-        .search-input { background-color: var(--bs-body-bg); border: 1px solid var(--bs-border-color); }
-        
-        /* --- MODERN PRODUCT CARD --- */
-        .product-card {
-            background-color: var(--bs-body-bg);
-            border: 1px solid var(--bs-border-color-translucent);
-            border-radius: 1rem;
-            overflow: hidden;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--primary-slate);
             transition: all 0.3s ease;
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            border-color: var(--bs-primary-border-subtle);
         }
 
-        .img-container {
-            position: relative;
-            padding: 0.75rem; /* Memberikan padding agar gambar terlihat seperti 'inset' */
+        /* --- MODERN NAVIGATION --- */
+        .double-header {
+            background: rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .header-top { padding: 15px 0; }
+        
+        .brand-logo {
+            background: var(--primary-slate);
+            color: var(--accent-amber) !important;
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800;
+        }
+
+        .nav-custom .nav-link {
+            font-weight: 600;
+            color: #64748b !important;
+            padding: 0.5rem 1.2rem;
+            border-radius: 12px;
+            transition: all 0.2s;
+        }
+
+        .nav-custom .nav-link:hover, .nav-custom .nav-link.active {
+            color: var(--primary-slate) !important;
+            background: rgba(0,0,0,0.03);
+        }
+
+        .search-input {
+            border-radius: 15px !important;
+            padding: 12px 20px;
+            border: 1px solid #e2e8f0;
+            background: #f1f5f9;
+        }
+
+        /* --- PRODUCT CARDS --- */
+        .card { 
+            border: none;
+            border-radius: 24px;
+            overflow: hidden;
+            background: #ffffff;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: var(--card-shadow);
+        }
+        
+        .card:hover { 
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
         }
 
         .product-img {
             height: 220px;
-            width: 100%;
             object-fit: cover;
-            border-radius: 0.75rem; /* Sudut gambar membulat */
-            /* background-color: var(--bs-tertiary-bg); */
+            transition: transform 0.5s ease;
         }
 
-        .img-placeholder {
-            height: 220px;
-            border-radius: 0.75rem;
-            background-color: var(--bs-secondary-bg);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: var(--bs-secondary-color);
+        .card:hover .product-img { transform: scale(1.1); }
+
+        .price-text {
+            color: var(--primary-slate);
+            font-weight: 800;
+            font-size: 1.25rem;
         }
 
-        .card-body-custom {
-            padding: 1.25rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
+        .btn-success {
+            background-color: var(--primary-slate);
+            border: none;
+            border-radius: 14px;
+            padding: 12px;
+            font-weight: 700;
+            transition: all 0.3s;
         }
 
-        /* Badge Stok Modern */
-        .badge-stock {
-            position: absolute;
-            top: 1rem;
-            right: 1rem;
-            backdrop-filter: blur(4px);
-            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        .btn-success:hover {
+            background-color: var(--accent-amber);
+            color: var(--primary-slate);
         }
 
-        /* Tombol Beli */
-        .btn-action {
-            border-radius: 0.75rem;
-            padding: 0.6rem 1rem;
-            font-weight: 600;
-            transition: 0.2s;
-        }
-        .btn-action:hover {
-            transform: scale(1.02);
-        }
-
-        /* --- PROMO MODAL STYLE --- */
-        .promo-header {
-            background: linear-gradient(135deg, #FFD700, #FF8C00); /* Warna Emas Promo */
-            color: #000;
-            border-top-left-radius: 1rem;
-            border-top-right-radius: 1rem;
-            position: relative;
+        /* --- MODAL PROMO (GUEST) --- */
+        .modal-promo-content {
+            border-radius: 35px;
             overflow: hidden;
+            border: none;
         }
-        .promo-header::after {
-            content: "";
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: radial-gradient(circle, rgba(255,255,255,0.4) 0%, transparent 60%);
-            animation: shine 3s infinite linear;
+        .promo-bg {
+            background: linear-gradient(135deg, var(--primary-slate) 0%, #1e293b 100%);
+            color: white;
+            padding: 50px 30px;
         }
-        @keyframes shine {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+
+        /* --- THEME --- */
+        [data-bs-theme="dark"] {
+            --bg-light: #0f172a;
+            --primary-slate: #f8fafc;
         }
-        .promo-badge {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: #fff;
-            color: #d63384;
-            padding: 5px 10px;
-            border-radius: 20px;
-            font-size: 0.7rem;
-            font-weight: bold;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
-            z-index: 2;
-        }
+        [data-bs-theme="dark"] .card { background: #1e293b; }
+        [data-bs-theme="dark"] .double-header { background: rgba(15, 17, 42, 0.9) !important; }
+        [data-bs-theme="dark"] .search-input { background: #334155; border: none; color: white; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER (Sama dengan Orders/Cart) -->
-    <header class="mb-5 shadow-sm bg-body-tertiary sticky-top">
-        
-        <!-- Baris Atas -->
-        <div class="header-top py-2 border-bottom border-secondary border-opacity-10">
+    <header class="double-header sticky-top">
+        <div class="header-top">
             <div class="container d-flex justify-content-between align-items-center">
-                <!-- Logo -->
-                <a class="navbar-brand fw-bold d-flex align-items-center text-decoration-none fs-4" href="/shop">
-                    <span class="bg-warning text-white rounded-3 px-2 me-2 fs-5 d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px;">VR</span> 
-                    <span class="text-body fw-bold">Mots De Vivre</span>
+                <a class="navbar-brand fw-bolder d-flex align-items-center text-decoration-none fs-4" href="/shop">
+                    <div class="brand-logo me-2">DV</div> 
+                    <span class="text-body tracking-tighter">Mots De Vivre</span>
                 </a>
-                
-                <div class="d-flex align-items-center gap-3">
-                    <nav class="nav nav-custom d-none d-md-flex">
-                        <a class="nav-link active text-warning fw-bold" href="/shop"><i class="bi bi-house"></i> Home</a>
-                        
+
+                <div class="d-flex align-items-center gap-2">
+                    <nav class="nav nav-custom d-none d-lg-flex me-3" id="navMenu">
+                        <a class="nav-link active" href="/shop">Home</a>
                         <?php if (session()->get('is_logged_in')) : ?>
-                            <a class="nav-link text-body position-relative" href="/cart">
-                                <i class="bi bi-bag"></i> Cart
-                                <?php if(isset($cart_count) && $cart_count > 0): ?>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm border border-2 border-white" style="font-size: 0.6rem;"><?= $cart_count ?></span>
-                                <?php endif; ?>
-                            </a>
-                            <a class="nav-link text-body" href="/orders"><i class="bi bi-receipt"></i> Orders</a>
-                            <a class="nav-link text-body" href="/profile"><i class="bi bi-person-fill"></i> Profile</a>
-                        <?php else: ?>
-                            <a class="nav-link text-body" href="/about"><i class="bi bi-shop"></i> About Toko</a>
+                            <a class="nav-link" href="/cart">Cart <span class="badge bg-danger rounded-pill"><?= $cart_count ?? 0 ?></span></a>
+                            <a class="nav-link" href="/orders">Orders</a>
+                            <a class="nav-link" href="/profile">Profile</a>
                         <?php endif; ?>
+                        <a class="nav-link" href="/about">About Mots</a>
                     </nav>
-                    <button class="btn btn-outline-secondary btn-sm rounded-circle p-2" style="width: 38px; height: 38px;" id="themeToggle"><i class="fas fa-sun" id="themeIcon"></i></button>
-                    
-                    <!-- Mobile Menu Button -->
-                    <button class="btn btn-outline-secondary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
+
+                    <button class="theme-toggle-btn btn btn-light rounded-pill border-0" id="themeToggle">
+                        <i class="fas fa-sun" id="themeIcon"></i>
+                    </button>
+
+                    <button class="btn btn-outline-secondary border-0 d-lg-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu">
+                        <i class="fas fa-bars"></i>
+                    </button>
                 </div>
             </div>
         </div>
 
-        <!-- Baris Bawah (Search & Auth) -->
-        <div class="header-bottom py-3">
-            <div class="container d-flex justify-content-between align-items-center flex-wrap gap-3">
-                <div class="flex-grow-1" style="max-width: 400px;">
-                    <form class="d-flex position-relative" role="search">
-                        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-secondary"><i class="bi bi-search"></i></span>
-                        <input class="form-control search-input ps-5 rounded-pill" type="search" placeholder="Cari produk impian..." aria-label="Search">
+        <div class="header-bottom pb-3">
+            <div class="container d-flex justify-content-between align-items-center">
+                <div class="flex-grow-1 me-4" style="max-width: 500px;">
+                    <form class="position-relative">
+                        <span class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"><i class="fas fa-search"></i></span>
+                        <input class="form-control search-input ps-5" type="search" placeholder="Cari produk...">
                     </form>
                 </div>
 
-                <div class="d-flex align-items-center">
+                <div class="auth-zone">
                     <?php if (session()->get('is_logged_in')) : ?>
-                        <div class="text-body small me-3 d-none d-sm-block text-end">
-                            <div class="text-muted" style="font-size: 0.75rem;">Halo,</div>
-                            <div class="fw-bold"><?= esc(session()->get('name')) ?></div>
+                        <div class="dropdown d-none d-md-block">
+                            <button class="btn btn-dark rounded-pill px-4 dropdown-toggle fw-bold" data-bs-toggle="dropdown">
+                                Hai, <?= esc(session()->get('name')) ?>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4">
+                                <li><a class="dropdown-item py-2" href="/profile"><i class="bi bi-person me-2"></i> Profile</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item py-2 text-danger" href="/auth/logout"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                            </ul>
                         </div>
-                        <a href="/auth/logout" class="btn btn-danger btn-sm rounded-pill px-3 fw-bold"><i class="bi bi-box-arrow-right me-1"></i> Logout</a>
                     <?php else : ?>
-                        <a href="/auth" class="btn btn-outline-primary btn-sm fw-bold me-2 px-4 rounded-pill">Login</a>
-                        <a href="/register" class="btn btn-primary btn-sm fw-bold px-4 rounded-pill">Sign Up</a>
+                        <a href="/auth" class="btn btn-link text-decoration-none text-dark fw-bold me-2">Login</a>
+                        <a href="/register" class="btn btn-warning rounded-pill px-4 fw-bold shadow-sm">Sign Up</a>
                     <?php endif; ?>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- KONTEN UTAMA -->
-    <div class="container pb-5">
-
-        <!-- Pesan Sukses/Gagal -->
-        <?php if (session()->getFlashdata('success')) : ?>
-            <div class="alert alert-success alert-dismissible fade show shadow-sm border-0 border-start border-4 border-success" role="alert">
-                <i class="bi bi-check-circle-fill me-2 text-success"></i> <?= session()->getFlashdata('success') ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php endif; ?>
-
-        <?php if (session()->getFlashdata('error')) : ?>
-            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 border-start border-4 border-danger" role="alert">
-                <i class="bi bi-exclamation-triangle-fill me-2 text-danger"></i> <?= session()->getFlashdata('error') ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php endif; ?>
-
-        <!-- GRID PRODUK -->
-        <div class="row row-cols-1 row-cols-sm-2 row-cols-md-3 row-cols-lg-4 g-4">
-            
-            <?php if(!empty($products)): ?>
-                <?php foreach ($products as $item) : ?>
-                <div class="col">
-                    <div class="product-card shadow-sm">
-                        
-                        <!-- Area Gambar -->
-                        <div class="img-container">
-                            <?php if(!empty($item->gambar)): ?>
-                                <img src="http://localhost:8000/storage/<?= $item->gambar ?>" class="product-img shadow-sm" alt="<?= esc($item->nama_produk) ?>">
-                            <?php else: ?>
-                                <div class="img-placeholder shadow-sm">
-                                    <i class="bi bi-image fs-1 mb-2 opacity-50"></i>
-                                    <small>No Image</small>
-                                </div>
-                            <?php endif; ?>
-                            
-                            <!-- Badge Stok -->
-                            <?php if($item->stok < 5 && $item->stok > 0): ?>
-                                <span class="badge bg-warning text-dark badge-stock rounded-pill"><i class="bi bi-exclamation-circle me-1"></i> Menipis</span>
-                            <?php elseif($item->stok == 0): ?>
-                                <span class="badge bg-secondary badge-stock rounded-pill">Habis</span>
-                            <?php endif; ?>
-                        </div>
-
-                        <!-- Body Card -->
-                        <div class="card-body-custom">
-                            <h5 class="card-title text-truncate fw-bold mb-1" title="<?= esc($item->nama_produk) ?>">
-                                <?= esc($item->nama_produk) ?>
-                            </h5>
-                            
-                            <p class="card-text text-secondary small flex-grow-1 mb-3" style="line-height: 1.5;">
-                                <?= substr(esc($item->deskripsi), 0, 50) ?>...
-                            </p>
-
-                            <div class="d-flex justify-content-between align-items-end mt-auto">
-                                <div>
-                                    <small class="text-muted d-block" style="font-size: 0.75rem;">Harga</small>
-                                    <span class="h5 mb-0 text-primary fw-bold">
-                                        Rp <?= number_format($item->harga, 0, ',', '.') ?>
-                                    </span>
-                                </div>
-                                <div class="text-end">
-                                    <small class="text-muted d-block" style="font-size: 0.75rem;">Stok</small>
-                                    <span class="fw-medium text-body-emphasis"><?= $item->stok ?></span>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Footer / Tombol -->
-                        <div class="p-3 pt-0 bg-transparent border-0">
-                            <?php if($item->stok > 0): ?>
-                                <a href="/shop/add/<?= $item->id ?>" class="btn btn-success w-100 btn-action shadow-sm">
-                                    <i class="bi bi-bag-plus-fill me-2"></i> Beli Sekarang
-                                </a>
-                                <!-- btnbeli -->
-                            <?php else: ?>
-                                <button class="btn btn-secondary w-100 btn-action opacity-75" disabled>Stok Habis</button>
-                            <?php endif; ?>
-                        </div>
-
-                    </div>
-                </div>
-                <?php endforeach; ?>
-            
+    <div class="collapse border-top border-secondary bg-body shadow-sm d-lg-none sticky-top" id="mobileMenu" style="top: 130px; z-index: 1040;">
+        <div class="container py-3">
+            <a href="/shop" class="d-block py-2 text-decoration-none text-body fw-bold">Home</a>
+            <a href="/about" class="d-block py-2 text-decoration-none text-body">About Mots</a>
+            <?php if (session()->get('is_logged_in')) : ?>
+                <a href="/cart" class="d-block py-2 text-decoration-none text-body">Cart</a>
+                <a href="/orders" class="d-block py-2 text-decoration-none text-body">Orders</a>
+                <a href="/profile" class="d-block py-2 text-decoration-none text-body">Profile</a>
+                <a href="/auth/logout" class="d-block py-2 text-decoration-none text-danger">Logout</a>
             <?php else: ?>
-                <div class="col-12">
-                    <div class="text-center py-5 opacity-50">
-                        <i class="bi bi-box-seam fa-4x mb-3 d-block"></i>
-                        <h4 class="fw-light">Belum ada produk yang tersedia.</h4>
-                    </div>
-                </div>
+                <a href="/auth" class="d-block py-2 text-decoration-none text-body">Login</a>
+                <a href="/register" class="d-block py-2 text-decoration-none text-warning fw-bold">Sign Up</a>
             <?php endif; ?>
-
         </div>
     </div>
 
-    <!-- PROMO POPUP MODAL (Hanya untuk yang belum login) -->
-    <?php if (!session()->get('is_logged_in')) : ?>
-    <div class="modal fade" id="promoModal" tabindex="-1" aria-labelledby="promoModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content border-0 shadow-lg" style="border-radius: 1rem;">
-                <div class="modal-header promo-header border-0 p-4">
-                    <span class="promo-badge">NEW USER</span>
-                    <h1 class="modal-title fs-3 fw-bold w-100 text-center" style="z-index: 1;">
-                        <i class="bi bi-gift-fill me-2"></i> Selamat Datang!
-                    </h1>
-                    <button type="button" class="btn-close btn-close-white position-absolute top-0 end-0 m-3" data-bs-dismiss="modal" aria-label="Close" style="z-index: 2;"></button>
-                </div>
-                <div class="modal-body text-center p-4">
-                    <h4 class="fw-bold mb-2">Dapatkan Promo Spesial!</h4>
-                    <p class="text-muted mb-4">Daftar sekarang dan klaim hadiah pengguna baru Anda.</p>
-                    
-                    <div class="d-flex justify-content-center gap-3 mb-4">
-                        <!-- Promo 1: Gratis Ongkir -->
-                        <div class="text-center p-2 rounded bg-body-tertiary shadow-sm" style="min-width: 100px;">
-                            <div class="bg-primary bg-opacity-10 text-primary rounded-circle p-3 mb-2 mx-auto" style="width: 50px; height: 50px; display:flex; align-items:center; justify-content:center;">
-                                <i class="bi bi-truck fs-5"></i>
-                            </div>
-                            <small class="fw-bold d-block text-primary">Gratis<br>Ongkir</small>
+    <div class="container pb-5 mt-4">
+
+        <?php if (session()->getFlashdata('success')) : ?>
+            <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4"><i class="bi bi-check-circle me-2"></i> <?= session()->getFlashdata('success') ?></div>
+        <?php endif; ?>
+
+        <div class="d-flex justify-content-between align-items-center mb-4 pt-3">
+            <h3 class="fw-800 m-0">Produk Pilihan</h3>
+            <div class="text-muted small">Pilih parfum sesuai pribadimu</div>
+        </div>
+
+        <div class="row g-4">
+            <?php if(!empty($products)): ?>
+                <?php foreach ($products as $item) : ?>
+                <div class="col-6 col-md-4 col-lg-3">
+                    <div class="card h-100">
+                        <div class="position-relative overflow-hidden">
+                            <?php if(!empty($item->gambar)): ?>
+                                <img src="http://localhost:8090/storage/<?= $item->gambar ?>" class="product-img w-100" alt="Produk">
+                            <?php else: ?>
+                                <div class="img-placeholder bg-light d-flex align-items-center justify-content-center" style="height:220px;"><i class="fa can-spray fa-3x text-muted opacity-25"></i></div>
+                            <?php endif; ?>
+
+                            <?php if($item->stok < 5 && $item->stok > 0): ?>
+                                <span class="position-absolute top-0 start-0 badge bg-warning text-dark m-3 badge-stok shadow-sm">Limit</span>
+                            <?php elseif($item->stok == 0): ?>
+                                <span class="position-absolute top-0 start-0 badge bg-danger m-3 badge-stok shadow-sm">Habis</span>
+                            <?php endif; ?>
                         </div>
-                        
-                        <!-- Promo 2: Diskon 20% -->
-                        <div class="text-center p-2 rounded bg-body-tertiary shadow-sm" style="min-width: 100px;">
-                            <div class="bg-success bg-opacity-10 text-success rounded-circle p-3 mb-2 mx-auto" style="width: 50px; height: 50px; display:flex; align-items:center; justify-content:center;">
-                                <i class="bi bi-percent fs-5"></i>
-                            </div>
-                            <small class="fw-bold d-block text-success">Diskon<br>20% Off</small>
+
+                        <div class="card-body p-4">
+                            <h6 class="fw-bold mb-1 text-truncate"><?= esc($item->nama_produk) ?></h6>
+                            <p class="text-muted small mb-3"><?= substr(esc($item->deskripsi), 0, 40) ?>...</p>
+                            <div class="price-text text-primary">Rp <?= number_format($item->harga, 0, ',', '.') ?></div>
+                        </div>
+
+                        <div class="card-footer bg-transparent border-0 p-4 pt-0">
+                            <?php if($item->stok > 0): ?>
+                                <?php if (session()->get('is_logged_in')) : ?>
+                                    <a href="/shop/add/<?= $item->id ?>" class="btn btn-success w-100"><i class="bi bi-cart-plus me-2"></i> Tambah</a>
+                                <?php else : ?>
+                                    <a href="/auth" class="btn btn-outline-dark w-100 rounded-pill fw-bold add-to-cart-btn" data-product-id="<?= $item->id ?>">Beli</a>
+                                <?php endif; ?>
+                            <?php else: ?>
+                                <button class="btn btn-light w-100 text-muted" disabled>Habis</button>
+                            <?php endif; ?>
                         </div>
                     </div>
+                </div>
+                <?php endforeach; ?>
+            <?php else: ?>
+                <div class="col-12 text-center py-5">
+                    <img src="https://illustrations.popsy.co/slate/empty-box.svg" style="width:200px" alt="Empty">
+                    <h5 class="mt-4 fw-bold">Belum ada produk nih...</h5>
+                </div>
+            <?php endif; ?>
+        </div>
+    </div>
 
-                    <!-- Tombol Klaim (MENGARAH KE URL REGISTER DENGAN PARAMETER) -->
-                    <a href="/register?promo=NEWUSER20_FREESHIP" class="btn btn-primary w-100 rounded-pill py-2 fw-bold shadow-sm mb-3">
-                        Klaim Promo & Daftar <i class="bi bi-arrow-right-circle ms-1"></i>
-                    </a>
-                    <button type="button" class="btn btn-link text-decoration-none text-muted btn-sm" data-bs-dismiss="modal">Nanti saja, saya hanya melihat-lihat</button>
+    <?php if (!session()->get('is_logged_in')): ?>
+    <div class="modal fade" id="promoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content modal-promo-content">
+                <div class="promo-bg text-center">
+                    <div class="bg-warning text-dark d-inline-block p-3 rounded-circle mb-4 shadow">
+                        <i class="fas fa-gift fs-2"></i>
+                    </div>
+                    <h2 class="fw-900 mb-3">Welcome Promo!</h2>
+                    <p class="mb-5 opacity-75">Daftar sekarang dan dapatkan penawaran spesial untuk pembelian parfum pertamamu.</p>
+                    <a href="/register?promo=newuser" class="btn btn-warning rounded-pill px-5 py-3 fw-bold shadow-lg w-100 mb-3">Daftar Sekarang</a>
+                    <button type="button" class="btn btn-link text-white text-decoration-none opacity-50 small" data-bs-dismiss="modal">Nanti saja</button>
                 </div>
             </div>
         </div>
     </div>
     <?php endif; ?>
 
-    <!-- Bootstrap 5 JS Bundle -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
-
-    <!-- SCRIPT TEMA -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
     <script>
-        // --- LOGIKA TEMA ---
-        const themeToggleBtn = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const htmlElement = document.documentElement;
-
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(currentTheme);
-
-        themeToggleBtn.addEventListener('click', () => {
-            const newTheme = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            setTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
+        // Auto Show Welcome Promo Modal if Guest
+        document.addEventListener('DOMContentLoaded', function () {
+            const promoEl = document.getElementById('promoModal');
+            if (promoEl) {
+                const myModal = new bootstrap.Modal(promoEl);
+                myModal.show();
+            }
         });
 
-        function setTheme(theme) {
-            htmlElement.setAttribute('data-bs-theme', theme);
-            if (theme === 'dark') {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
+        // Theme Toggle
+        const themeToggleBtn = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+        themeToggleBtn.addEventListener('click', () => {
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
+            localStorage.setItem('theme', newTheme);
+        });
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+        // ✅ DETEKSI LOGIN DARI LOCALSTORAGE UNTUK SINKRONISASI UI
+        const isLoggedIn = localStorage.getItem('is_logged_in');
+        const userData = localStorage.getItem('user_data');
+        const hasSession = <?= json_encode(session()->get('is_logged_in') ?? false) ?>;
+
+        if (isLoggedIn === 'true' && userData && !hasSession) {
+            const user = JSON.parse(userData);
+            
+            // Update auth buttons header
+            const authZone = document.querySelector('.auth-zone');
+            authZone.innerHTML = `
+                <div class="dropdown d-none d-md-block">
+                    <button class="btn btn-dark rounded-pill px-4 dropdown-toggle fw-bold" data-bs-toggle="dropdown">
+                        Hai, ${user.name}
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end shadow-lg border-0 rounded-4">
+                        <li><a class="dropdown-item py-2" href="/profile"><i class="bi bi-person me-2"></i> Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item py-2 text-danger" href="#" id="logoutBtn"><i class="bi bi-box-arrow-right me-2"></i> Logout</a></li>
+                    </ul>
+                </div>
+            `;
+            
+            // ✅ UPDATE NAVBAR MENU (HAPUS SUBSCRIPTIONS DARI JS JUGA)
+            const navMenu = document.getElementById('navMenu');
+            const aboutLink = navMenu.querySelector('a[href="/about"]');
+            
+            const menuHTML = `
+                <a class="nav-link" href="/cart">Cart</a>
+                <a class="nav-link" href="/orders">Orders</a>
+                <a class="nav-link" href="/profile">Profile</a>
+            `;
+            aboutLink.insertAdjacentHTML('beforebegin', menuHTML);
+            
+            // ✅ UPDATE MOBILE MENU
+            const mobileMenu = document.getElementById('mobileMenu');
+            const aboutMobile = mobileMenu.querySelector('a[href="/about"]');
+            
+            const mobileMenuHTML = `
+                <a href="/cart" class="d-block py-2 text-decoration-none text-body">Cart</a>
+                <a href="/orders" class="d-block py-2 text-decoration-none text-body">Orders</a>
+                <a href="/profile" class="d-block py-2 text-decoration-none text-body">Profile</a>
+                <a href="#" class="d-block py-2 text-decoration-none text-danger" id="logoutBtnMobile">Logout</a>
+            `;
+            aboutMobile.insertAdjacentHTML('afterend', mobileMenuHTML);
+            
+            // UPDATE BUTTON "BELI" JADI "TAMBAH"
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                const productId = btn.getAttribute('data-product-id');
+                btn.href = `/shop/add/${productId}`;
+                btn.className = 'btn btn-success w-100';
+                btn.innerHTML = '<i class="bi bi-cart-plus me-2"></i> Tambah';
+            });
+            
+            // Hide promo modal
+            const promoModal = document.getElementById('promoModal');
+            if (promoModal) {
+                promoModal.remove();
             }
         }
 
-        // --- LOGIKA POPUP MODAL (SHOW ONCE) ---
-        document.addEventListener('DOMContentLoaded', function() {
-            const promoModalEl = document.getElementById('promoModal');
-            if (promoModalEl) {
-                // Tampilkan hanya jika belum pernah ditampilkan di sesi ini
-                const promoShown = sessionStorage.getItem('promoShown');
-                if (!promoShown) {
-                    const promoModal = new bootstrap.Modal(promoModalEl);
-                    promoModal.show();
-                    sessionStorage.setItem('promoShown', 'true');
-                }
+        // Handle logout (desktop & mobile)
+        document.addEventListener('click', function(e) {
+            if (e.target && (e.target.id === 'logoutBtn' || e.target.id === 'logoutBtnMobile')) {
+                e.preventDefault();
+                localStorage.removeItem('user_data');
+                localStorage.removeItem('user_email');
+                localStorage.removeItem('is_logged_in');
+                window.location.href = '/shop';
             }
         });
     </script>

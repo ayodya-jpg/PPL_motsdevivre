@@ -6,42 +6,56 @@ use App\Controllers\BaseController;
 
 class Dashboard extends BaseController
 {
-    private $api_url_products = 'http://localhost:8000/api/products';
-    private $api_url_orders = 'http://localhost:8000/api/admin/orders';
-
     public function index()
     {
         $client = \Config\Services::curlrequest();
         
-        // 1. Ambil Data Produk
-        $products = [];
+        // 1. Ambil Products
+        $apiUrlProducts = 'http://nginx_server/api/products';
         try {
-            $response = $client->get($this->api_url_products);
-            $body = json_decode($response->getBody());
+            $response = $client->get($apiUrlProducts);
+            $body     = json_decode($response->getBody());
             $products = $body->data ?? [];
         } catch (\Exception $e) {
             $products = [];
         }
 
-        // 2. Ambil Data Pesanan (BARU)
-        $orders = [];
+        // 2. Ambil Orders (10 terbaru)
+        $apiUrlOrders = 'http://nginx_server/api/admin/orders';
         try {
-            $response = $client->get($this->api_url_orders);
-            $body = json_decode($response->getBody());
-            $allOrders = $body->data ?? [];
-            
-            // Opsional: Kita ambil 5 pesanan terbaru saja agar dashboard tidak kepanjangan
-            $orders = array_slice($allOrders, 0, 5);
+            $response = $client->get($apiUrlOrders);
+            $body     = json_decode($response->getBody());
+            $orders   = is_array($body) ? array_slice($body, 0, 10) : [];
         } catch (\Exception $e) {
             $orders = [];
         }
 
-        $data = [
-            'title' => 'Dashboard Admin',
-            'products' => $products,
-            'orders' => $orders // Kirim data order ke view
-        ];
+        // 3. Ambil Pending Memberships (dari backend Laravel)
+        $apiUrlPending = 'http://nginx_server/api/admin/membership/pending';
+        try {
+            $response = $client->get($apiUrlPending);
+            $body     = json_decode($response->getBody());
+            $pendingMemberships = $body->data ?? [];
+        } catch (\Exception $e) {
+            $pendingMemberships = [];
+        }
 
-        return view('admin/dashboard', $data);
-    }
+        // 4. Ambil Active Memberships (dari backend Laravel)
+        $apiUrlActive = 'http://nginx_server/api/admin/membership/active';
+        try {
+            $response = $client->get($apiUrlActive);
+            $body     = json_decode($response->getBody());
+            $activeMemberships = $body->data ?? [];
+        } catch (\Exception $e) {
+            $activeMemberships = [];
+        }
+
+        return view('admin/dashboard', [
+            'title'              => 'Dashboard Admin',
+            'products'           => $products,
+            'orders'             => $orders,
+            'pendingMemberships' => $pendingMemberships,
+            'activeMemberships'  => $activeMemberships
+        ]);
+    }   
 }

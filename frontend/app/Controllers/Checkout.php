@@ -2,150 +2,160 @@
 
 namespace App\Controllers;
 
+use App\Controllers\BaseController;
+
 class Checkout extends BaseController
 {
-    private $api_url_profile = 'http://localhost:8000/api/profile';
-    private $api_url_checkout = 'http://localhost:8000/api/checkout';
+    // ✅ URL API Backend (Gunakan IP Wifi Anda yang sudah berhasil sebelumnya)
+    // Pastikan IP ini sama dengan yang ada di Shop.php agar konsisten
+    protected $api_base_url = 'http://192.168.18.71:8090/api'; 
 
     public function index()
     {
         // 1. Cek Login
-        if (!session()->get('is_logged_in')) {
-            return redirect()->to('/auth');
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return redirect()->to('/auth')->with('error', 'Silakan login terlebih dahulu.');
         }
 
         // 2. Cek Keranjang
         $cart = session()->get('cart') ?? [];
         if (empty($cart)) {
-            return redirect()->to('/shop');
+            return redirect()->to('/shop')->with('error', 'Keranjang kosong!');
         }
 
-        // 3. Ambil Data User (Alamat & Promo)
-        $client = \Config\Services::curlrequest();
-        $userAddress = null;
-        $userPromo = null;
-
-        try {
-            $userId = session()->get('user_id');
-            $response = $client->get($this->api_url_profile . '?user_id=' . $userId);
-            $body = json_decode($response->getBody());
-            
-            if($body->success) {
-                if(isset($body->data->address)) {
-                    $userAddress = $body->data->address;
-                }
-                // Ambil kode promo dari database untuk ditampilkan di dropdown
-                if(isset($body->data->promo_code)) {
-                    $userPromo = $body->data->promo_code;
-                }
-            }
-        } catch (\Exception $e) {
-            $userAddress = null;
-            $userPromo = null;
-        }
-
-        // 4. Hitung Subtotal
+        // 3. Hitung Subtotal
         $subtotal = 0;
-        foreach($cart as $item) {
+        foreach ($cart as $item) {
             $subtotal += $item['harga'] * $item['qty'];
         }
 
-        $data = [
-            'title' => 'Checkout',
-            'cart' => $cart,
-            'subtotal' => $subtotal,
-            'address' => $userAddress,
-            'user_promo' => $userPromo
-        ];
-
-        return view('shop/checkout', $data);
-    }
-
-    public function process()
-    {
-        // 1. Ambil Input dari Form View
-        $shippingMethodRaw = $this->request->getPost('shipping_method'); // Format: "NamaKurir|Harga"
-        $shippingEstimation = $this->request->getPost('shipping_estimation'); 
-        $paymentMethod = $this->request->getPost('payment_method');
-        $address = $this->request->getPost('address');
-        
-        // Ambil kode promo dari input hidden/select
-        // Kita prioritaskan final_promo_code jika ada (dari JS), atau promo_code (dari dropdown langsung)
-        $promoCode = $this->request->getPost('final_promo_code') ?: $this->request->getPost('promo_code');
-
-        if(!$address) {
-            return redirect()->back()->with('error', 'Silahkan pilih atau tambah alamat pengiriman.');
+        // 4. Ambil Alamat
+        $address = session()->get('address');
+        if (is_array($address)) {
+            $address = (object) $address;
         }
 
-        // 2. Pecah Data Shipping
-        $parts = explode('|', $shippingMethodRaw);
-        if(count($parts) < 2) {
-             return redirect()->back()->with('error', 'Pilih metode pengiriman yang valid.');
-        }
-        $shipName = $parts[0];
-        $shipCost = (int)$parts[1];
-
-        // 3. Hitung Ulang Total (Server Side Calculation)
-        $cart = session()->get('cart');
-        $subtotal = 0;
-        foreach($cart as $item) {
-            $subtotal += $item['harga'] * $item['qty'];
-        }
-
-        // --- LOGIKA HITUNG DISKON ---
-        $discountAmount = 0;
-        
-        // Validasi Promo: Harus "NEWUSER20_FREESHIP"
-        if ($promoCode === 'NEWUSER20_FREESHIP') {
-            // Diskon 20% dari Subtotal Produk
-            $discProduk = $subtotal * 0.20;
-            
-            // Diskon 8% dari Ongkir (Sesuai request)
-            $discOngkir = $shipCost * 0.08;
-            
-            $discountAmount = $discProduk + $discOngkir;
-        }
-
-        // Total Bayar = (Subtotal + Ongkir) - Diskon
-        $totalBayar = ($subtotal + $shipCost) - $discountAmount;
-        
-        // Pastikan total tidak minus
-        if($totalBayar < 0) $totalBayar = 0;
-
-
-        // 4. Persiapkan Data untuk Backend Laravel
-        $payload = [
-            'user_id' => session()->get('user_id'),
-            'items' => array_values($cart),
-            'total_harga' => $totalBayar, // Total yang sudah didiskon
-            'payment_method' => $paymentMethod,
-            'shipping_method' => $shipName,
-            'shipping_cost' => $shipCost,
-            'shipping_estimation' => $shippingEstimation, 
-            'delivery_address' => $address,
-            'status' => 'pending'
-        ];
-
-        // 5. Kirim ke API
+        // 5. Ambil Promo User dari API Laravel
         $client = \Config\Services::curlrequest();
+        $user_promos = [];
+        
         try {
-            $response = $client->post($this->api_url_checkout, [
-                'json' => $payload,
-                'http_errors' => false 
+            // Endpoint: /api/user-promos/{user_id}
+            $response = $client->get($this->api_base_url . '/user-promos/' . $userId, [
+                'http_errors' => false,
+                'timeout' => 5
             ]);
             
             $body = json_decode($response->getBody());
+            if (isset($body->success) && $body->success) {
+                $user_promos = $body->data;
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'Gagal mengambil promo: ' . $e->getMessage());
+            // Lanjut saja meski promo gagal load
+        }
 
-            if ($response->getStatusCode() == 201 && $body->success) {
-                // SUKSES
-                session()->remove('cart'); // Kosongkan Keranjang
-                return redirect()->to('/orders')->with('success', 'Pesanan berhasil dibuat! Segera lakukan pembayaran.');
+        // 6. Tampilkan View
+        return view('Shop/checkout', [
+            'title'       => 'Checkout Aman',
+            'cart'        => $cart,
+            'subtotal'    => $subtotal,
+            'address'     => $address,
+            'user_promos' => $user_promos,
+            'user_name'   => session()->get('name'),
+            'user_email'  => session()->get('email')
+        ]);
+    }
+
+    /**
+     * processCheckout: Meminta Snap Token ke Backend
+     * PENTING: Method ini TIDAK boleh menghapus cart session.
+     */
+    public function processCheckout()
+    {
+        $json = $this->request->getJSON();
+
+        if (!$json) {
+            return $this->response->setJSON(['success' => false, 'error' => 'Data tidak valid'])->setStatusCode(400);
+        }
+
+        // Validasi User
+        $userId = session()->get('user_id');
+        if (!$userId) {
+            return $this->response->setJSON(['success' => false, 'error' => 'Sesi habis, login ulang.'])->setStatusCode(401);
+        }
+
+        // Validasi Cart
+        $cart = session()->get('cart') ?? [];
+        if (empty($cart)) {
+            return $this->response->setJSON(['success' => false, 'error' => 'Keranjang kosong!'])->setStatusCode(400);
+        }
+
+        // Format Items untuk API Laravel
+        $items = [];
+        foreach ($cart as $item) {
+            $items[] = [
+                'product_id' => $item['id'],
+                'jumlah'     => $item['qty']
+            ];
+        }
+
+        // Siapkan Payload Data
+        $checkoutData = [
+            'user_id'     => $userId,
+            'name'        => session()->get('name') ?? 'Customer',
+            'email'       => session()->get('email') ?? 'customer@example.com',
+            'total_harga' => $json->total,
+            'items'       => $items,
+            'promo_codes' => $json->promo_codes ?? []
+        ];
+
+        // Kirim ke API Laravel (/api/checkout)
+        $client = \Config\Services::curlrequest();
+        
+        try {
+            $response = $client->post($this->api_base_url . '/checkout', [
+                'json'        => $checkoutData,
+                'http_errors' => false,
+                'timeout'     => 15 // Timeout agak lama untuk proses midtrans
+            ]);
+
+            $body = json_decode($response->getBody());
+
+            if (isset($body->success) && $body->success) {
+                // ✅ Sukses dapat Token, kirim balik ke Frontend
+                // JANGAN hapus session cart di sini!
+                return $this->response->setJSON($body);
             } else {
-                return redirect()->back()->with('error', 'Gagal Checkout: ' . ($body->message ?? 'Error API'));
+                return $this->response->setJSON([
+                    'success' => false, 
+                    'error'   => $body->message ?? 'Gagal memproses checkout di backend.'
+                ])->setStatusCode(400);
             }
 
         } catch (\Exception $e) {
-            return redirect()->back()->with('error', 'Terjadi kesalahan koneksi ke server API.');
+            log_message('error', 'Checkout Error: ' . $e->getMessage());
+            return $this->response->setJSON([
+                'success' => false, 
+                'error'   => 'Koneksi ke server pembayaran gagal.'
+            ])->setStatusCode(500);
         }
+    }
+
+    /**
+     * ✅ FUNGSI PENTING: Menghapus Cart setelah pembayaran sukses
+     * Dipanggil via AJAX/Fetch dari view checkout.php
+     */
+    public function successPay()
+    {
+        // 1. Hapus Session Cart
+        session()->remove('cart');
+
+        // 2. Kirim respon JSON agar JS tahu proses selesai
+        return $this->response->setJSON([
+            'success' => true,
+            'message' => 'Cart berhasil dikosongkan.'
+        ]);
     }
 }

@@ -13,11 +13,10 @@ class Order extends Model
         'user_id',
         'total_harga',
         'status',
-        'payment_method',
-        'shipping_method',
-        'shipping_cost',
-        'shipping_estimation',
-        'delivery_address'
+        'snap_token',
+        'transaction_id',
+        'payment_type',
+        'paid_at'
     ];
 
     // Relasi ke Detail Order
@@ -31,5 +30,4 @@ class Order extends Model
     {
         return $this->belongsTo(User::class);
     }
-    
 }

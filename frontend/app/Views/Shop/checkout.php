@@ -1,477 +1,601 @@
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="dark">
+<html lang="id" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title) ?></title>
     
-    <!-- CSS Dependencies -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    <!-- Google Font (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-IoyLJLDukf-pHuqF"></script>
 
     <style>
-<<<<<<< Updated upstream
-        body { transition: background-color 0.3s, color 0.3s; }
-        .search-input { border: 1px solid rgba(255,255,255,0.2); }
-        [data-bs-theme="light"] .search-input { border: 1px solid #ced4da; background-color: #fff; color: #212529; }
-        [data-bs-theme="dark"] .search-input { background-color: #2b3035; color: #fff; border-color: #495057; }
-        .checkout-card { border: 1px solid rgba(255,255,255,0.1); }
-        [data-bs-theme="light"] .checkout-card { border: 1px solid rgba(0,0,0,0.1); }
-        .cart-thumb { width: 50px; height: 50px; object-fit: cover; border-radius: 4px; }
+        :root {
+            --primary-slate: #0f172a;
+            --accent-amber: #fbbf24;
+            --bg-light: #f8fafc;
+            --card-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.08);
+        }
 
-=======
         body { 
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-            background-color: var(--bs-tertiary-bg);
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--primary-slate);
+            transition: all 0.3s ease;
         }
->>>>>>> Stashed changes
-        
-        /* --- HEADER STYLE --- */
-        .nav-custom .nav-link { font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; padding: 0.5rem 1rem; opacity: 0.7; transition: 0.2s; }
-        .nav-custom .nav-link:hover, .nav-custom .nav-link.active { opacity: 1; transform: translateY(-2px); }
-        .nav-custom .nav-link i { font-size: 1.3rem; margin-bottom: 4px; }
 
-        /* --- CHECKOUT CARDS --- */
+        .double-header {
+            background: rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .brand-logo {
+            background: #10b981;
+            color: white !important;
+            width: 36px; height: 36px;
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+        }
+
         .checkout-card {
-            background-color: var(--bs-body-bg);
-            border: 1px solid var(--bs-border-color-translucent);
-            border-radius: 1rem;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.02);
-            margin-bottom: 1.5rem;
-            overflow: hidden;
-        }
-        .checkout-header {
-            padding: 1.25rem;
-            border-bottom: 1px solid var(--bs-border-color-translucent);
-            background-color: rgba(var(--bs-tertiary-bg-rgb), 0.5);
-            font-weight: 600;
-            display: flex;
-            align-items: center;
-            gap: 0.75rem;
-        }
-        .checkout-body { padding: 1.5rem; }
-
-        /* --- FORM ELEMENTS --- */
-        .form-select, .form-control {
-            border-radius: 0.75rem;
-            padding: 0.75rem 1rem;
-            border-color: var(--bs-border-color);
-            background-color: var(--bs-body-bg);
-        }
-        .form-select:focus, .form-control:focus {
-            box-shadow: 0 0 0 4px rgba(13, 110, 253, 0.15);
-            border-color: #0d6efd;
+            border: none;
+            border-radius: 24px;
+            background: #ffffff;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 24px;
         }
 
-        /* --- SUMMARY SECTION --- */
-        .cart-item {
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            padding-bottom: 1rem;
-            margin-bottom: 1rem;
-            border-bottom: 1px dashed var(--bs-border-color-translucent);
-        }
-        .cart-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
-        
-        .cart-thumb {
-            width: 60px;
-            height: 60px;
-            object-fit: cover;
-            border-radius: 0.5rem;
-            border: 1px solid var(--bs-border-color);
+        .card-header-custom {
+            padding: 20px 24px;
+            border-bottom: 1px solid #f1f5f9;
+            font-weight: 700;
+            font-size: 1.1rem;
         }
 
-        /* --- ESTIMATION & PROMO BOX --- */
+        .form-control, .form-select {
+            border-radius: 14px;
+            padding: 12px 16px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .summary-card {
+            background: var(--primary-slate);
+            color: white;
+            border-radius: 30px;
+            padding: 32px;
+            position: sticky;
+            top: 100px;
+        }
+
+        .btn-pay {
+            background: var(--accent-amber);
+            color: var(--primary-slate);
+            border: none;
+            border-radius: 16px;
+            padding: 16px;
+            font-weight: 800;
+            width: 100%;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+
+        .btn-pay:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(251, 191, 36, 0.4);
+            background: #f59e0b;
+        }
+
         .estimation-box {
-<<<<<<< Updated upstream
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px dashed #10b981;
+            border-radius: 14px;
             display: none;
-            margin-top: 10px;
-            border-radius: 4px;
-
-=======
-            background-color: rgba(13, 202, 240, 0.1);
-            border: 1px solid rgba(13, 202, 240, 0.2);
-            color: var(--bs-info-text-emphasis);
-            padding: 1rem;
-            border-radius: 0.75rem;
-            margin-top: 1rem;
-            display: none;
-            align-items: center;
-            gap: 0.75rem;
         }
 
-        .promo-success-box {
-            background-color: rgba(25, 135, 84, 0.1);
-            border: 1px solid rgba(25, 135, 84, 0.2);
-            color: var(--bs-success-text-emphasis);
-            padding: 1rem;
-            border-radius: 0.75rem;
-            margin-top: 1rem;
-            display: none;
+        .promo-card-item {
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent !important;
         }
-        
-        /* Sticky Summary for Desktop */
-        @media (min-width: 992px) {
-            .sticky-summary {
-                position: sticky;
-                top: 100px;
-            }
->>>>>>> Stashed changes
+        .promo-card-item:hover { border-color: var(--accent-amber) !important; }
+        .voucher-circle { width: 45px; height: 45px; border-radius: 12px; display: flex; align-items: center; justify-content: center; }
+
+        [data-bs-theme="dark"] {
+            --bg-light: #0f172a;
+            --primary-slate: #f8fafc;
         }
+        [data-bs-theme="dark"] .checkout-card { background: #1e293b; }
+        [data-bs-theme="dark"] .summary-card { background: #1e293b; border: 1px solid #334155; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER (KONSISTEN) -->
-    <header class="mb-5 shadow-sm bg-body-tertiary sticky-top">
-        <div class="header-top py-2 border-bottom border-secondary border-opacity-10">
+    <header class="double-header sticky-top mb-5">
+        <div class="header-top py-3">
             <div class="container d-flex justify-content-between align-items-center">
-                <a class="navbar-brand fw-bold d-flex align-items-center text-decoration-none fs-4" href="/shop">
-                    <span class="bg-success text-white rounded-3 px-2 me-2 fs-5 d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px;"><i class="bi bi-shield-lock-fill"></i></span> 
-                    <span class="text-body fw-bold">Checkout Aman</span>
+                <a class="navbar-brand fw-bolder d-flex align-items-center text-decoration-none fs-4" href="/shop">
+                    <div class="brand-logo me-2"><i class="bi bi-shield-lock-fill"></i></div> 
+                    <span class="text-body tracking-tighter">Checkout Aman</span>
                 </a>
-                
                 <div class="d-flex align-items-center gap-3">
-                    <nav class="nav nav-custom d-none d-md-flex">
-                        <a class="nav-link text-body" href="/shop"><i class="bi bi-house"></i> Home</a>
-                        <a class="nav-link text-body" href="/cart"><i class="bi bi-bag"></i> Cart</a>
-                    </nav>
-                    <button class="btn btn-outline-secondary btn-sm rounded-circle p-2" style="width: 38px; height: 38px;" id="themeToggle"><i class="fas fa-sun" id="themeIcon"></i></button>
+                    <span class="d-none d-md-inline text-muted small"><i class="bi bi-lock me-1"></i> Enkripsi SSL 256-bit</span>
+                    <button class="theme-toggle-btn btn btn-light rounded-pill border-0 shadow-sm" id="themeToggle">
+                        <i class="fas fa-sun" id="themeIcon"></i>
+                    </button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- KONTEN UTAMA -->
     <div class="container pb-5">
-        
-        <!-- Flash Messages -->
-        <?php if (session()->getFlashdata('error')) : ?>
-            <div class="alert alert-danger alert-dismissible fade show shadow-sm border-0 border-start border-4 border-danger mb-4" role="alert">
-                <i class="bi bi-exclamation-circle-fill me-2"></i> <?= session()->getFlashdata('error') ?>
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        <?php endif; ?>
+        <div class="row g-5">
+            
+            <div class="col-lg-7">
+                <?php if (session()->getFlashdata('error')) : ?>
+                    <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4"><?= session()->getFlashdata('error') ?></div>
+                <?php endif; ?>
 
-        <form action="/checkout/process" method="post" id="checkoutForm">
-            <div class="row g-4">
-                
-                <!-- KOLOM KIRI: FORMULIR -->
-                <div class="col-lg-7">
-                    
-                    <!-- 1. ALAMAT PENGIRIMAN -->
+                <form id="checkoutForm">
                     <div class="checkout-card">
-                        <div class="checkout-header">
-                            <div class="bg-danger bg-opacity-10 p-2 rounded-circle text-danger"><i class="bi bi-geo-alt-fill"></i></div>
-                            <div>Alamat Pengiriman</div>
-                        </div>
-                        <div class="checkout-body">
+                        <div class="card-header-custom"><i class="bi bi-geo-alt-fill me-2 text-danger"></i> Alamat Pengiriman</div>
+                        <div class="card-body p-4">
                             <?php if($address): ?>
-                                <div class="p-3 bg-body-tertiary rounded-3 border mb-3">
-                                    <h6 class="fw-bold mb-1"><?= esc($address->nama_penerima) ?> <span class="fw-normal text-muted">(<?= esc($address->no_hp) ?>)</span></h6>
-                                    <p class="mb-0 text-secondary small" style="line-height: 1.5;">
-                                        <?= esc($address->alamat_lengkap) ?><br>
-                                        <?= esc($address->kota) ?>, <?= esc($address->provinsi) ?> - <?= esc($address->kode_pos) ?>
-                                    </p>
+                                <div class="p-3 border rounded-4 bg-light mb-3">
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <h6 class="fw-bold mb-1"><?= esc($address->nama_penerima) ?></h6>
+                                            <p class="small text-muted mb-0"><?= esc($address->alamat_lengkap) ?></p>
+                                            <p class="small text-muted font-monospace"><?= esc($address->kota) ?></p>
+                                        </div>
+                                        <span class="badge bg-dark rounded-pill">Utama</span>
+                                    </div>
                                 </div>
-                                <input type="hidden" name="address" value="<?= esc($address->alamat_lengkap) ?>">
-                                <a href="/profile" class="btn btn-outline-primary btn-sm rounded-pill px-3">Ganti Alamat</a>
                             <?php else: ?>
-                                <div class="text-center py-4">
-                                    <img src="https://cdn-icons-png.flaticon.com/512/3710/3710268.png" width="60" class="mb-3 opacity-50" alt="No Address">
-                                    <p class="text-muted small">Anda belum memiliki alamat tersimpan.</p>
-                                    <a href="/profile" class="btn btn-primary rounded-pill px-4 fw-bold">Tambah Alamat Baru</a>
+                                <div class="text-center py-4 bg-light rounded-4">
+                                    <p class="text-muted small">Belum ada alamat yang tersimpan.</p>
+                                    <a href="/profile" class="btn btn-dark btn-sm rounded-pill px-4">Tambah Alamat</a>
                                 </div>
-                                <input type="hidden" name="address" required>
                             <?php endif; ?>
                         </div>
                     </div>
 
-                    <!-- 2. METODE PENGIRIMAN -->
                     <div class="checkout-card">
-                        <div class="checkout-header">
-                            <div class="bg-info bg-opacity-10 p-2 rounded-circle text-info"><i class="bi bi-truck-front-fill"></i></div>
-                            <div>Metode Pengiriman</div>
-                        </div>
-                        <div class="checkout-body">
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary text-uppercase">Pilih Kurir</label>
-                                <select name="shipping_method" id="shippingMethod" class="form-select form-select-lg" required>
-                                    <option value="0" data-cost="0" data-estimasi="-">-- Pilih Pengiriman --</option>
-                                    
-                                    <option value="JNE Reguler|20000" data-cost="20000" data-estimasi="3-4 Hari">
-                                        JNE Reguler (3-4 Hari) - Rp 20.000
-                                    </option>
-                                    <option value="J&T Express|25000" data-cost="25000" data-estimasi="2-3 Hari">
-                                        J&T Express (2-3 Hari) - Rp 25.000
-                                    </option>
-                                    <option value="SiCepat Halu|18000" data-cost="18000" data-estimasi="3-5 Hari">
-                                        SiCepat Halu (3-5 Hari) - Rp 18.000
-                                    </option>
-                                    <option value="Instant GoSend|50000" data-cost="50000" data-estimasi="Hari Ini">
-                                        Instant GoSend (Hari Ini) - Rp 50.000
-                                    </option>
-                                </select>
-
-                                <input type="hidden" name="shipping_estimation" id="shippingEstimationInput">
-
-                                <div id="estimationDisplay" class="estimation-box">
-                                    <i class="bi bi-clock-history fs-4"></i>
-                                    <div>
-                                        <small class="d-block text-uppercase fw-bold" style="font-size: 0.65rem; opacity: 0.8;">Estimasi Tiba</small>
-                                        <strong id="estimasiText" class="fs-6">-</strong>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- 3. KODE PROMO (DROPDOWN) -->
-                    <div class="checkout-card">
-                        <div class="checkout-header">
-                            <div class="bg-success bg-opacity-10 p-2 rounded-circle text-success"><i class="bi bi-ticket-perforated-fill"></i></div>
-                            <div>Voucher & Promo</div>
-                        </div>
-                        <div class="checkout-body">
-                            <label class="form-label small fw-bold text-secondary text-uppercase">Gunakan Promo</label>
-                            
-                            <!-- DROPDOWN PILIH PROMO -->
-                            <select class="form-select form-select-lg" id="promoSelect" name="promo_code">
-                                <option value="">-- Tidak Pakai Promo --</option>
-                                
-                                <!-- Cek Variable dari Controller (Database) -->
-                                <?php if(!empty($user_promo)): ?>
-                                    <option value="<?= esc($user_promo) ?>">
-                                        🎁 <?= esc($user_promo) ?> (20% Off + Hemat Ongkir)
-                                    </option>
-                                <?php endif; ?>
+                        <div class="card-header-custom"><i class="bi bi-truck me-2 text-primary"></i> Pilihan Pengiriman</div>
+                        <div class="card-body p-4">
+                            <label class="form-label small fw-bold text-muted mb-3">PILIH METODE KURIR</label>
+                            <select id="shippingMethod" class="form-select mb-3">
+                                <option value="0" data-cost="0" data-estimasi="-">-- Pilih Kurir --</option>
+                                <option value="JNE Reguler|20000" data-cost="20000" data-estimasi="3-4 Hari">JNE Reguler - Rp 20.000</option>
+                                <option value="J&T Express|25000" data-cost="25000" data-estimasi="2-3 Hari">J&T Express - Rp 25.000</option>
+                                <option value="SiCepat Halu|18000" data-cost="18000" data-estimasi="3-5 Hari">SiCepat Halu - Rp 18.000</option>
+                                <option value="Instant GoSend|50000" data-cost="50000" data-estimasi="Hari Ini">Instant GoSend - Rp 50.000</option>
                             </select>
 
-                            <!-- Pesan Sukses -->
-                            <div id="promoSuccessBox" class="promo-success-box">
-                                <div class="d-flex align-items-center gap-2">
-                                    <i class="bi bi-check-circle-fill fs-5"></i>
-                                    <div>
-                                        <div class="fw-bold">Promo Diterapkan!</div>
-                                        <small class="opacity-75">Diskon 20% Produk + 8% Ongkir</small>
-                                    </div>
+                            <div id="estimationDisplay" class="estimation-box p-3 align-items-center gap-3">
+                                <div class="bg-white rounded-circle p-2 text-success shadow-sm">
+                                    <i class="bi bi-lightning-charge-fill"></i>
+                                </div>
+                                <div>
+                                    <small class="d-block text-muted uppercase font-bold" style="font-size: 10px;">ESTIMASI TIBA</small>
+                                    <strong id="estimasiText" class="text-success font-black">-</strong>
                                 </div>
                             </div>
                         </div>
                     </div>
 
-                    <!-- 4. PEMBAYARAN -->
-                    <div class="checkout-card">
-                        <div class="checkout-header">
-                            <div class="bg-warning bg-opacity-10 p-2 rounded-circle text-warning"><i class="bi bi-credit-card-fill"></i></div>
-                            <div>Metode Pembayaran</div>
-                        </div>
-                        <div class="checkout-body">
-                            <div class="mb-3">
-                                <label class="form-label small fw-bold text-secondary text-uppercase">Pilih Pembayaran</label>
-                                <select name="payment_method" class="form-select form-select-lg" required>
-                                    <option value="">-- Pilih Pembayaran --</option>
-                                    <option value="Transfer BCA">Transfer Bank BCA (Cek Otomatis)</option>
-                                    <option value="Transfer Mandiri">Transfer Bank Mandiri</option>
-                                    <option value="GoPay">GoPay / QRIS</option>
-                                    <option value="COD">COD (Bayar di Tempat)</option>
-                                </select>
+                    <a href="/cart" class="btn btn-link text-decoration-none text-muted fw-bold"><i class="bi bi-arrow-left"></i> Kembali ke Keranjang</a>
+                </form>
+            </div>
+
+            <div class="col-lg-5">
+                <div class="summary-card shadow-lg">
+                    <h5 class="fw-bold mb-4">Ringkasan Pesanan</h5>
+                    
+                    <div class="order-items mb-4" style="max-height: 250px; overflow-y: auto;">
+                        <?php foreach($cart as $item): ?>
+                            <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom border-white border-opacity-10">
+                                <div class="bg-white bg-opacity-10 rounded-3 p-2">
+                                    <i class="fas fa-egg text-amber" style="color:var(--accent-amber)"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <h6 class="small fw-bold mb-0 text-white"><?= esc($item['nama']) ?></h6>
+                                    <small class="opacity-50">x<?= $item['qty'] ?></small>
+                                </div>
+                                <span class="small fw-bold">Rp <?= number_format($item['harga'] * $item['qty'], 0, ',', '.') ?></span>
                             </div>
-                        </div>
+                        <?php endforeach; ?>
                     </div>
 
-                    <a href="/cart" class="btn btn-link text-decoration-none text-secondary ps-0"><i class="bi bi-arrow-left me-1"></i> Kembali ke Keranjang</a>
-                </div>
+                    <div class="mb-4">
+                        <label class="small fw-bold text-white text-opacity-50 d-block mb-2">VOUCHER SAYA</label>
+                        <button type="button" class="btn btn-outline-light w-100 rounded-4 py-3 text-start d-flex justify-content-between align-items-center border-white border-opacity-20" data-bs-toggle="modal" data-bs-target="#promoModal">
+                            <span id="selectedPromoText"><i class="bi bi-ticket-perforated me-2"></i> Gunakan Promo</span>
+                            <i class="bi bi-chevron-right small"></i>
+                        </button>
+                    </div>
 
-                <!-- KOLOM KANAN: RINGKASAN -->
-                <div class="col-lg-5">
-                    <div class="checkout-card sticky-summary">
-                        <div class="checkout-header">
-                            <div class="bg-primary bg-opacity-10 p-2 rounded-circle text-primary"><i class="bi bi-receipt"></i></div>
-                            <div>Ringkasan Pesanan</div>
+                    <div class="pricing-details">
+                        <div class="d-flex justify-content-between mb-2 small opacity-75">
+                            <span>Subtotal Produk</span>
+                            <span>Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
                         </div>
                         
-                        <div class="checkout-body pt-2">
-                            <!-- List Item -->
-                            <div class="mb-4" style="max-height: 300px; overflow-y: auto;">
-                                <?php foreach($cart as $item): ?>
-                                <div class="cart-item">
-                                    <?php if(!empty($item['gambar'])): ?>
-                                        <img src="http://localhost:8000/storage/<?= $item['gambar'] ?>" class="cart-thumb">
-                                    <?php else: ?>
-                                        <div class="cart-thumb bg-secondary d-flex align-items-center justify-content-center text-white"><i class="bi bi-image"></i></div>
-                                    <?php endif; ?>
-                                    
-                                    <div class="flex-grow-1">
-                                        <h6 class="mb-0 small fw-bold text-body-emphasis"><?= esc($item['nama']) ?></h6>
-                                        <div class="d-flex justify-content-between mt-1">
-                                            <small class="text-muted"><?= $item['qty'] ?> x Rp <?= number_format($item['harga'], 0, ',', '.') ?></small>
-                                            <small class="fw-bold">Rp <?= number_format($item['harga'] * $item['qty'], 0, ',', '.') ?></small>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php endforeach; ?>
-                            </div>
+                        <div id="promoProductRow" class="justify-content-between mb-2 small text-warning d-none">
+                            <span>Diskon Produk</span>
+                            <span id="discProductDisplay">-Rp 0</span>
+                        </div>
 
-                            <!-- Rincian Harga Lengkap -->
-                            <div class="bg-body-tertiary p-3 rounded-3 border">
-                                <div class="d-flex justify-content-between mb-2 small text-secondary">
-                                    <span>Subtotal Produk</span>
-                                    <span class="fw-bold text-body">Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
-                                </div>
-                                <div class="d-flex justify-content-between mb-2 small text-secondary">
-                                    <span>Biaya Pengiriman</span>
-                                    <span class="fw-bold text-body" id="shippingDisplay">Rp 0</span>
-                                </div>
-                                
-                                <!-- Baris Diskon -->
-                                <div id="discountDetails" style="display: none;" class="border-top border-bottom border-secondary border-opacity-10 py-2 my-2">
-                                    <div class="d-flex justify-content-between mb-1 small text-success">
-                                        <span><i class="bi bi-tag-fill me-1"></i> Diskon Produk (20%)</span>
-                                        <span class="fw-bold" id="productDiscountDisplay">-Rp 0</span>
-                                    </div>
-                                    <div class="d-flex justify-content-between small text-success">
-                                        <span><i class="bi bi-truck me-1"></i> Diskon Ongkir (8%)</span>
-                                        <span class="fw-bold" id="shippingDiscountDisplay">-Rp 0</span>
-                                    </div>
-                                </div>
+                        <div class="d-flex justify-content-between mb-2 small opacity-75">
+                            <span>Ongkos Kirim</span>
+                            <span id="shippingDisplay">Rp 0</span>
+                        </div>
 
-                                <hr class="border-secondary border-opacity-25 my-3">
-                                <div class="d-flex justify-content-between align-items-center">
-                                    <span class="fw-bold">Total Bayar</span>
-                                    <span class="fs-4 fw-bold text-primary" id="totalDisplay">Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
-                                </div>
-                            </div>
+                        <div id="promoShippingRow" class="justify-content-between mb-2 small text-warning d-none">
+                            <span>Diskon Ongkir</span>
+                            <span id="discShippingDisplay">-Rp 0</span>
+                        </div>
 
-                            <!-- Input Hidden untuk Data Promo yang akan dikirim -->
-                            <!-- Name harus 'promo_code' agar ditangkap controller -->
-                            <!-- Value diisi via JS saat dropdown berubah -->
-                            <input type="hidden" name="final_promo_code" id="finalPromoCode"> 
-
-                            <button type="submit" form="checkoutForm" class="btn btn-primary w-100 py-3 mt-4 fw-bold rounded-pill shadow-sm">
-                                Bayar Sekarang <i class="bi bi-arrow-right-circle-fill ms-2"></i>
-                            </button>
+                        <hr class="opacity-20 my-4">
+                        <div class="d-flex justify-content-between align-items-end mb-4">
+                            <span class="opacity-75">Total Tagihan</span>
+                            <span class="fs-2 fw-black" style="color: var(--accent-amber);" id="totalDisplay">Rp <?= number_format($subtotal, 0, ',', '.') ?></span>
                         </div>
                     </div>
-                </div>
 
+                    <button type="button" id="payButton" class="btn btn-pay text-uppercase tracking-widest">
+                        Bayar Sekarang <i class="bi bi-arrow-right-circle-fill ms-2"></i>
+                    </button>
+                </div>
             </div>
-        </form>
+        </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <div class="modal fade" id="promoModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 rounded-5 overflow-hidden">
+                <div class="modal-header bg-dark text-white p-4">
+                    <h5 class="modal-title fw-bold">Pilih Voucher</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body p-4 bg-light">
+                    <div class="alert alert-info small rounded-4 border-0 mb-4">
+                        Maksimal 1 Promo Produk + 1 Promo Ongkir.
+                    </div>
+                    <div id="promoList">
+                    <?php if(!empty($user_promos)): ?>
+                        <div><small class="fw-bold text-primary"><i class="bi bi-gift-fill me-1"></i> VOUCHER KAMU</small>
+                        <?php foreach($user_promos as $p): ?>
+                            <div class="card border-0 rounded-4 shadow-sm mb-3 promo-card-item">
+                                <div class="card-body d-flex align-items-center gap-3">
+                                    <div class="voucher-circle bg-<?= $p->promo_type == 'product' ? 'warning' : 'primary' ?> text-white">
+                                        <i class="bi bi-<?= $p->promo_type == 'product' ? 'tag-fill' : 'truck' ?>"></i>
+                                    </div>
+                                    <div class="flex-grow-1">
+                                        <h6 class="fw-bold mb-0"><?= $p->promo_code ?></h6>
+                                        <small class="text-muted">Potongan <?= $p->discount_percent ?>%</small>
+                                    </div>
+                                    <div class="form-check">
+                                        <input class="form-check-input promo-checkbox" 
+                                               type="checkbox" 
+                                               data-code="<?= $p->promo_code ?>"
+                                               data-type="<?= $p->promo_type ?>" 
+                                               data-value="<?= $p->discount_percent ?>" 
+                                               data-valuetype="percentage"
+                                               data-source="local"
+                                               data-min="0">
+                                    </div>
+                                </div>
+                            </div>
+                        <?php endforeach; ?>
+                        </div>
+                    <?php else: ?>
+                        <div class="text-center py-4 text-muted small">Memuat promo...</div>
+                    <?php endif; ?>
+                    </div>
+                </div>
+                <div class="modal-footer border-0 p-4 pt-0">
+                    <button type="button" class="btn btn-dark w-100 py-3 rounded-4 fw-bold" data-bs-dismiss="modal">Terapkan Promo</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- LOGIKA HITUNG HARGA -->
     <script>
-        const subtotal = <?= $subtotal ?>;
-        
-        // Input Elements
-        const shippingSelect = document.getElementById('shippingMethod');
-        const promoSelect = document.getElementById('promoSelect');
-        const shippingEstimationInput = document.getElementById('shippingEstimationInput');
-        const finalPromoCodeInput = document.getElementById('finalPromoCode');
-        
-        // Display Elements
-        const shippingDisplay = document.getElementById('shippingDisplay');
-        const totalDisplay = document.getElementById('totalDisplay');
-        const productDiscountDisplay = document.getElementById('productDiscountDisplay');
-        const shippingDiscountDisplay = document.getElementById('shippingDiscountDisplay');
-        const discountDetails = document.getElementById('discountDetails');
-        const promoSuccessBox = document.getElementById('promoSuccessBox');
-        const estimationBox = document.getElementById('estimationDisplay');
-        const estimasiText = document.getElementById('estimasiText');
+    // --- 1. INISIALISASI VARIABEL ---
+    const subtotal = <?= $subtotal ?>; 
+    const userId = <?= session()->get('user_id') ?? 0 ?>;
+    
+    // ID Element
+    const shippingSelect = document.getElementById('shippingMethod');
+    const shippingDisplay = document.getElementById('shippingDisplay');
+    const totalDisplay = document.getElementById('totalDisplay');
+    const promoListContainer = document.getElementById('promoList');
 
-        // Fungsi Kalkulasi Utama
-        function calculateTotal() {
-            // 1. Ambil Ongkir
-            const selectedShip = shippingSelect.options[shippingSelect.selectedIndex];
-            let shippingCost = parseInt(selectedShip.getAttribute('data-cost'));
-            const estimasiRaw = selectedShip.getAttribute('data-estimasi');
-            
-            if (isNaN(shippingCost)) shippingCost = 0;
-            
-            // Update UI Estimasi
-            shippingEstimationInput.value = estimasiRaw;
-            if (shippingCost === 0) {
-                estimationBox.style.display = 'none';
-                shippingDisplay.textContent = 'Rp 0';
-            } else {
-                estimasiText.textContent = estimasiRaw;
-                estimationBox.style.display = 'flex';
-                shippingDisplay.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(shippingCost);
-            }
+    // State Pilihan Promo
+    let selectedPromos = {
+        product: null,   // Slot Promo Produk
+        shipping: null   // Slot Promo Ongkir
+    };
 
-            // 2. Cek Promo
-            const selectedPromo = promoSelect.value;
-            let totalProductDiscount = 0;
-            let totalShippingDiscount = 0;
-
-            if (selectedPromo === 'NEWUSER20_FREESHIP') {
-                // Tampilkan Info
-                discountDetails.style.display = 'block';
-                promoSuccessBox.style.display = 'block';
-                
-                // Isi hidden input untuk dikirim ke controller
-                finalPromoCodeInput.value = selectedPromo;
-
-                // Hitung Diskon Produk 20%
-                totalProductDiscount = subtotal * 0.20;
-                
-                // Hitung Diskon Ongkir 8% (Jika ada ongkir)
-                if (shippingCost > 0) {
-                    totalShippingDiscount = shippingCost * 0.08;
-                }
-
-                // Update UI Diskon
-                productDiscountDisplay.textContent = '-Rp ' + new Intl.NumberFormat('id-ID').format(totalProductDiscount);
-                shippingDiscountDisplay.textContent = '-Rp ' + new Intl.NumberFormat('id-ID').format(totalShippingDiscount);
-            } else {
-                // Reset Promo
-                discountDetails.style.display = 'none';
-                promoSuccessBox.style.display = 'none';
-                finalPromoCodeInput.value = '';
-            }
-
-            const totalDiscount = totalProductDiscount + totalShippingDiscount;
-
-            // 3. Hitung Total Akhir
-            // Rumus: (Subtotal + Ongkir) - Total Diskon
-            const newTotal = (subtotal + shippingCost) - totalDiscount;
-            
-            // Render Total
-            totalDisplay.textContent = 'Rp ' + new Intl.NumberFormat('id-ID').format(newTotal);
+    // --- 2. LOAD PROMO DARI API LARAVEL ---
+    async function loadAllPromos() {
+        if (!userId) {
+            promoListContainer.innerHTML = `<div class="text-center py-4 text-muted small">Silakan login untuk melihat promo.</div>`;
+            return;
         }
 
-        // Event Listeners
-        shippingSelect.addEventListener('change', calculateTotal);
-        promoSelect.addEventListener('change', calculateTotal);
+        try {
+            // Fetch API Promo Premium
+            const response = await fetch(`http://localhost:8000/api/promo-codes/available?user_id=${userId}`);
+            const result = await response.json();
+            
+            let htmlPromos = '';
 
-        // Jalankan saat load
+            // Render Promo Premium (API)
+            if (result.success && result.data.length > 0) {
+                htmlPromos += `<div class="mb-3"><small class="fw-bold text-warning"><i class="bi bi-crown-fill me-1"></i> PREMIUM</small>`;
+                result.data.forEach(promo => {
+                    htmlPromos += renderPromoCard(promo.code, 'product', promo.value, promo.type, 'api', promo.min_purchase);
+                });
+                htmlPromos += `</div>`;
+            }
+
+            // Render Promo Lokal (yang sudah ada dari PHP)
+            // Kita ambil HTML yg sudah dirender PHP di dalam div #promoList
+            // Lalu kita gabungkan dengan hasil API
+            const existingLocalHtml = promoListContainer.innerHTML.trim();
+            let finalHtml = htmlPromos;
+
+            // Jika PHP sudah merender promo lokal (dan bukan text loading), kita pertahankan
+            if (existingLocalHtml && !existingLocalHtml.includes('Memuat promo')) {
+                finalHtml += existingLocalHtml; 
+            } else if (existingLocalHtml.includes('Memuat promo') && htmlPromos === '') {
+                finalHtml = `<div class="text-center py-4 text-muted small">Belum ada promo tersedia.</div>`;
+            }
+
+            // Update DOM jika ada perubahan
+            if (htmlPromos !== '') {
+                promoListContainer.innerHTML = finalHtml;
+            } else if (existingLocalHtml.includes('Memuat promo')) {
+                 // Kalau API kosong dan PHP kosong -> Tampilkan kosong
+                 promoListContainer.innerHTML = `<div class="text-center py-4 text-muted small">Belum ada promo tersedia.</div>`;
+            }
+
+        } catch (error) {
+            console.error("Gagal load API:", error);
+            // Biarkan fallback PHP bekerja
+            const existingLocalHtml = promoListContainer.innerHTML.trim();
+            if (existingLocalHtml.includes('Memuat promo')) {
+                 promoListContainer.innerHTML = `<div class="text-center py-4 text-muted small">Gagal memuat promo tambahan.</div>`;
+            }
+        }
+    }
+
+    // Helper: Buat HTML Card Promo (Khusus API)
+    function renderPromoCard(code, type, value, valueType, source, minOrder) {
+        const color = 'warning'; 
+        const icon = 'tag-fill';
+        const valDisplay = valueType === 'percentage' ? value + '%' : 'Rp ' + formatRupiah(value);
+
+        return `
+            <div class="card border-0 rounded-4 shadow-sm mb-2 promo-card-item">
+                <div class="card-body d-flex align-items-center gap-3 py-2">
+                    <div class="voucher-circle bg-${color} text-white"><i class="bi bi-${icon}"></i></div>
+                    <div class="flex-grow-1">
+                        <h6 class="fw-bold mb-0 small">${code}</h6>
+                        <small class="text-muted" style="font-size: 11px;">Hemat ${valDisplay}</small>
+                    </div>
+                    <div class="form-check">
+                        <input class="form-check-input promo-checkbox" type="checkbox" 
+                            data-code="${code}" 
+                            data-type="${type}" 
+                            data-value="${value}" 
+                            data-valuetype="${valueType}"
+                            data-source="${source}"
+                            data-min="${minOrder}">
+                    </div>
+                </div>
+            </div>`;
+    }
+
+    // --- 3. EVENT DELEGATION (MAIN LOGIC) ---
+    // Pasang listener di container utama, supaya elemen dinamis tetap kena
+    promoListContainer.addEventListener('change', function(e) {
+        
+        // Cek apakah targetnya adalah checkbox promo
+        if (e.target && e.target.classList.contains('promo-checkbox')) {
+            const checkbox = e.target;
+            const type = checkbox.getAttribute('data-type'); // 'product' atau 'shipping'
+            
+            if (checkbox.checked) {
+                // 1. Matikan checkbox lain yang tipenya sama (agar max 1 per tipe)
+                const allCheckboxes = document.querySelectorAll(`.promo-checkbox[data-type="${type}"]`);
+                allCheckboxes.forEach(other => {
+                    if (other !== checkbox) {
+                        other.checked = false;
+                    }
+                });
+
+                // 2. Simpan ke state
+                selectedPromos[type] = {
+                    code: checkbox.getAttribute('data-code'),
+                    value: parseFloat(checkbox.getAttribute('data-value')),
+                    valueType: checkbox.getAttribute('data-valuetype') || 'percentage',
+                    source: checkbox.getAttribute('data-source')
+                };
+            } else {
+                // 3. Jika di-uncheck, hapus dari state
+                selectedPromos[type] = null;
+            }
+
+            // 4. Hitung ulang & Update UI
+            calculateTotal();
+            updateSelectedPromoUI();
+        }
+    });
+
+    // --- 4. PERHITUNGAN TOTAL ---
+    function calculateTotal() {
+        // Ambil ongkir dari dropdown
+        const selectedOption = shippingSelect.options[shippingSelect.selectedIndex];
+        const shipCost = parseInt(selectedOption.getAttribute('data-cost')) || 0;
+        
+        let discountProduct = 0;
+        let discountShipping = 0;
+
+        // Hitung Diskon Produk
+        if (selectedPromos.product) {
+            const p = selectedPromos.product;
+            if (p.valueType === 'percentage') {
+                discountProduct = subtotal * (p.value / 100);
+            } else {
+                discountProduct = p.value; // Nominal fixed
+            }
+        }
+
+        // Hitung Diskon Ongkir
+        if (selectedPromos.shipping) {
+            const s = selectedPromos.shipping;
+            if (s.valueType === 'percentage') {
+                discountShipping = shipCost * (s.value / 100);
+            } else {
+                discountShipping = s.value;
+            }
+            // Validasi: Diskon ongkir tak boleh lebih dari ongkirnya
+            if (discountShipping > shipCost) discountShipping = shipCost;
+        }
+
+        // Update Tampilan Baris Diskon
+        updateRowUI('promoProductRow', 'discProductDisplay', discountProduct);
+        updateRowUI('promoShippingRow', 'discShippingDisplay', discountShipping);
+
+        // Update Tampilan Ongkir & Total
+        document.getElementById('shippingDisplay').textContent = `Rp ${formatRupiah(shipCost)}`;
+        
+        let grandTotal = (subtotal - discountProduct) + (shipCost - discountShipping);
+        if (grandTotal < 0) grandTotal = 0;
+
+        document.getElementById('totalDisplay').textContent = `Rp ${formatRupiah(grandTotal)}`;
+    }
+
+    // --- 5. FUNGSI UPDATE UI ---
+    function updateRowUI(rowId, spanId, amount) {
+        const row = document.getElementById(rowId);
+        if (amount > 0) {
+            row.classList.remove('d-none');
+            row.classList.add('d-flex');
+            document.getElementById(spanId).textContent = `-Rp ${formatRupiah(amount)}`;
+        } else {
+            row.classList.add('d-none');
+            row.classList.remove('d-flex');
+        }
+    }
+
+    function updateSelectedPromoUI() {
+        const codes = [];
+        if (selectedPromos.product) codes.push(selectedPromos.product.code);
+        if (selectedPromos.shipping) codes.push(selectedPromos.shipping.code);
+
+        const btnText = document.getElementById('selectedPromoText');
+        if (codes.length > 0) {
+            btnText.innerHTML = `<i class="bi bi-ticket-fill text-warning me-2"></i> ${codes.join(' + ')}`;
+            btnText.parentElement.classList.add('border-warning', 'bg-warning', 'bg-opacity-10');
+            btnText.classList.add('fw-bold', 'text-dark');
+        } else {
+            btnText.innerHTML = `<i class="bi bi-ticket-perforated me-2"></i> Gunakan Promo`;
+            btnText.parentElement.classList.remove('border-warning', 'bg-warning', 'bg-opacity-10');
+            btnText.classList.remove('fw-bold', 'text-dark');
+        }
+    }
+
+    function formatRupiah(angka) {
+        return new Intl.NumberFormat('id-ID').format(Math.round(angka));
+    }
+
+    // --- 6. EVENT LISTENER LAIN ---
+    
+    // Ganti Kurir -> Hitung Ulang Total
+    shippingSelect.addEventListener('change', function() {
+        const selectedOption = this.options[this.selectedIndex];
+        const estimasi = selectedOption.getAttribute('data-estimasi');
+        
+        if (estimasi && estimasi !== '-') {
+            document.getElementById('estimasiText').textContent = estimasi;
+            document.getElementById('estimationDisplay').style.display = 'flex';
+        } else {
+            document.getElementById('estimationDisplay').style.display = 'none';
+        }
         calculateTotal();
+    });
 
-        // Script Tema
-        const themeToggleBtn = document.getElementById('themeToggle');
-        const themeIcon = document.getElementById('themeIcon');
-        const htmlElement = document.documentElement;
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(currentTheme);
-        themeToggleBtn.addEventListener('click', () => {
-            const newTheme = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            setTheme(newTheme);
-            localStorage.setItem('theme', newTheme);
-        });
-        function setTheme(theme) {
-            htmlElement.setAttribute('data-bs-theme', theme);
-            if (theme === 'dark') { themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun'); } 
-            else { themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon'); }
+    // Tombol Bayar
+    document.getElementById('payButton').addEventListener('click', async function() {
+        const shipCost = parseInt(shippingSelect.options[shippingSelect.selectedIndex].getAttribute('data-cost')) || 0;
+        
+        if (shipCost === 0) { 
+            alert('Mohon pilih metode pengiriman terlebih dahulu!'); 
+            return; 
         }
+
+        this.disabled = true;
+        this.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>MEMPROSES...';
+
+        const totalRaw = document.getElementById('totalDisplay').textContent.replace(/[^\d]/g, '');
+
+        // Kumpulkan Kode Promo untuk dikirim ke Backend
+        const codesToSend = [];
+        if (selectedPromos.product) codesToSend.push(selectedPromos.product.code);
+        if (selectedPromos.shipping) codesToSend.push(selectedPromos.shipping.code);
+
+        const paymentData = {
+            total: parseInt(totalRaw),
+            promo_codes: codesToSend 
+        };
+
+        try {
+            const response = await fetch('/api/payment/checkout', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(paymentData)
+            });
+            
+            const data = await response.json();
+            
+            if (data.success && data.snap_token) {
+                window.snap.pay(data.snap_token, {
+                    onSuccess: () => window.location.href = '/orders',
+                    onPending: () => window.location.href = '/orders',
+                    onError: () => { alert('Pembayaran Gagal!'); this.disabled = false; this.innerHTML = 'BAYAR SEKARANG'; },
+                    onClose: () => { this.disabled = false; this.innerHTML = 'BAYAR SEKARANG'; }
+                });
+            } else {
+                throw new Error(data.error || 'Gagal membuat transaksi');
+            }
+        } catch (err) {
+            console.error(err);
+            alert('Error: ' + err.message);
+            this.disabled = false;
+            this.innerHTML = 'BAYAR SEKARANG';
+        }
+    });
+
+    // Theme Toggle
+    document.getElementById('themeToggle').addEventListener('click', () => {
+        const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+        document.documentElement.setAttribute('data-bs-theme', isDark ? 'light' : 'dark');
+    });
+
+    // Load Promo Awal
+    loadAllPromos();
+
     </script>
+
 </body>
 </html>

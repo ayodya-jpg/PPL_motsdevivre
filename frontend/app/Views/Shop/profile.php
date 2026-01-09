@@ -1,228 +1,361 @@
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="dark">
+<html lang="id" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title) ?></title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
+
     <style>
-        /* Style Konsisten dengan Halaman Lain */
-        body { transition: background-color 0.3s, color 0.3s; }
-        .nav-custom .nav-link { font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; padding: 0.5rem 1rem; opacity: 0.7; }
-        .nav-custom .nav-link:hover, .nav-custom .nav-link.active { opacity: 1; }
-        .nav-custom .nav-link i { font-size: 1.2rem; margin-bottom: 4px; }
-        .search-input { border: 1px solid rgba(255,255,255,0.2); }
-        [data-bs-theme="light"] .search-input { border: 1px solid #ced4da; background-color: #fff; color: #212529; }
-        [data-bs-theme="dark"] .search-input { background-color: #2b3035; color: #fff; border-color: #495057; }
-        
-        /* Profile Card Specific */
+        :root {
+            --primary-slate: #0f172a;
+            --accent-amber: #fbbf24;
+            --bg-light: #f8fafc;
+            --card-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.08);
+        }
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--primary-slate);
+            transition: all 0.3s ease;
+        }
+
+        .double-header {
+            background: rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .brand-logo {
+            background: var(--primary-slate);
+            color: var(--accent-amber) !important;
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800;
+        }
+
+        .nav-custom .nav-link {
+            font-weight: 600; color: #64748b !important;
+            padding: 0.5rem 1.2rem; border-radius: 12px;
+        }
+
+        .nav-custom .nav-link.active {
+            color: var(--primary-slate) !important;
+            background: rgba(0,0,0,0.03);
+        }
+
+        .profile-card {
+            border: none;
+            border-radius: 30px;
+            background: #ffffff;
+            box-shadow: var(--card-shadow);
+            overflow: hidden;
+        }
+
         .profile-header-bg {
-            background: linear-gradient(135deg, #6610f2, #d63384); /* Warna Ungu Pink */
-            height: 120px;
-            border-radius: 8px 8px 0 0;
+            background: linear-gradient(135deg, var(--primary-slate), #334155);
+            height: 140px;
         }
-        .avatar-container {
-            width: 100px;
-            height: 100px;
-            border-radius: 50%;
-            border: 4px solid;
-            margin-top: -50px;
-            background: #fff;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 2.5rem;
-            color: #6610f2;
+
+        .avatar-wrapper {
+            width: 110px; height: 110px;
+            border-radius: 35px;
+            background: white;
+            padding: 5px;
+            margin-top: -55px;
+            display: inline-block;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.1);
         }
-        [data-bs-theme="dark"] .avatar-container { border-color: #212529; }
-        [data-bs-theme="light"] .avatar-container { border-color: #fff; }
+
+        .avatar-box {
+            width: 100%; height: 100%;
+            border-radius: 30px;
+            background: var(--accent-amber);
+            display: flex; align-items: center; justify-content: center;
+            font-size: 2.5rem; color: var(--primary-slate);
+        }
+
+        .form-control {
+            border-radius: 16px;
+            padding: 12px 18px;
+            border: 1px solid #e2e8f0;
+            background: #f8fafc;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 4px rgba(251, 191, 36, 0.1);
+            border-color: var(--accent-amber);
+        }
+
+        .address-item {
+            background: #f8fafc;
+            border: 1px solid #f1f5f9;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .address-item:hover {
+            border-color: var(--accent-amber);
+            background: white;
+        }
+
+        .btn-theme-toggle {
+            background: #f1f5f9; border: none;
+            padding: 10px 18px; border-radius: 14px;
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-light: #0f172a;
+            --primary-slate: #f8fafc;
+        }
+        [data-bs-theme="dark"] .profile-card { background: #1e293b; }
+        [data-bs-theme="dark"] .address-item { background: #0f172a; border-color: #334155; }
+        [data-bs-theme="dark"] .double-header { background: rgba(15, 23, 42, 0.9) !important; }
+        [data-bs-theme="dark"] .form-control { background: #334155; border: none; color: white; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER (Update Menu Profile disini) -->
-    <header class="mb-4 shadow-sm bg-body-tertiary">
-        <div class="header-top py-2 border-bottom border-secondary border-opacity-25">
+    <header class="double-header sticky-top mb-5">
+        <div class="header-top py-3">
             <div class="container d-flex justify-content-between align-items-center">
-                <a class="navbar-brand fw-bold d-flex align-items-center text-decoration-none fs-4" href="/shop">
-                    <span class="bg-warning text-white rounded px-2 me-2 fs-5 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">VR</span> 
-                    <span class="text-body">Mots De Vivre</span>
+                <a class="navbar-brand fw-bolder d-flex align-items-center text-decoration-none fs-4" href="/shop">
+                    <div class="brand-logo me-2">DV</div> 
+                    <span class="text-body tracking-tighter">Mots De Vivre</span>
                 </a>
-                <div class="d-flex align-items-center gap-3">
-                    <nav class="nav nav-custom d-none d-md-flex">
-                        <a class="nav-link text-body" href="/shop"><i class="bi bi-house"></i> Home</a>
-                        <?php if (session()->get('is_logged_in')) : ?>
-                            <a class="nav-link position-relative text-body" href="/cart">
-                            <i class="bi bi-bag"></i> Cart
-                                <?php if(isset($cart_count) && $cart_count > 0): ?>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;"><?= $cart_count ?></span>
-                                <?php endif; ?>
-                            </a>
-                            <a class="nav-link text-body" href="/orders"><i class="bi bi-receipt"></i> Orders</a>
-                            
-                            <!-- MENU PROFILE (Menggantikan Products) -->
-                            <a class="nav-link active text-warning fw-bold" href="/profile">
-                            <i class="bi bi-person-fill"></i> Profile
-                            </a>
-                        <?php endif; ?>
-                    </nav>
 
-                    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" id="themeToggle">
-                        <i class="fas fa-sun" id="themeIcon"></i>
-                    </button>
+                <div class="d-flex align-items-center gap-2">
+                    <nav class="nav nav-custom d-none d-lg-flex me-3">
+                        <a class="nav-link" href="/shop">Home</a>
+                        <a class="nav-link" href="/cart">Cart <span class="badge bg-danger rounded-pill"><?= $cart_count ?? 0 ?></span></a>
+                        <a class="nav-link" href="/orders">Orders</a>
+                        <a class="nav-link active" href="/profile">Profile</a>
+                    </nav>
+                    <button class="btn-theme-toggle" id="themeToggle"><i class="fas fa-sun" id="themeIcon"></i></button>
+                    <button class="btn btn-outline-secondary border-0 d-lg-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- CONTENT PROFILE -->
     <div class="container pb-5">
         
         <?php if (session()->getFlashdata('success')) : ?>
-            <div class="alert alert-success"><?= session()->getFlashdata('success') ?></div>
+            <div class="alert alert-success border-0 rounded-4 shadow-sm mb-4">
+                <i class="fas fa-check-circle me-2"></i> <?= session()->getFlashdata('success') ?>
+            </div>
         <?php endif; ?>
 
-        <div class="row g-4">
-            <!-- KOLOM KIRI: DATA DIRI -->
-            <div class="col-md-4">
-                <div class="card border-0 shadow-sm h-100 text-center">
+        <?php if (session()->getFlashdata('error')) : ?>
+            <div class="alert alert-danger border-0 rounded-4 shadow-sm mb-4">
+                <i class="fas fa-exclamation-circle me-2"></i> <?= session()->getFlashdata('error') ?>
+            </div>
+        <?php endif; ?>
+
+        <div class="row g-5">
+            <div class="col-lg-4">
+                <div class="profile-card text-center">
                     <div class="profile-header-bg"></div>
-                    <div class="card-body">
-                        <div class="d-flex justify-content-center">
-                            <div class="avatar-container shadow-sm">
-                                <i class="fas fa-user"></i>
+                    <div class="card-body px-4 pb-5">
+                        <div class="avatar-wrapper">
+                            <div class="avatar-box">
+                                <i class="bi bi-person-fill"></i>
                             </div>
                         </div>
-                        <h4 class="mt-3 fw-bold"><?= esc($user->name) ?></h4>
-                        <p class="text-muted mb-1"><?= esc($user->email) ?></p>
-                        <span class="badge bg-primary bg-opacity-10 text-primary mb-3">Pelanggan</span>
                         
-                        <hr>
+                        <h4 class="fw-800 mt-3 mb-1"><?= esc($user->name) ?></h4>
+                        <p class="text-muted small mb-4"><?= esc($user->email) ?></p>
+
+                        <hr class="my-4 opacity-10">
+
                         <div class="text-start px-2">
-                            <small class="text-muted fw-bold">Bergabung Sejak</small>
-                            <p><i class="far fa-calendar-alt me-2"></i> <?= date('d F Y', strtotime($user->created_at)) ?></p>
+                            <div class="mb-3">
+                                <small class="text-muted fw-bold d-block mb-1">BERGABUNG SEJAK</small>
+                                <span class="fw-bold"><i class="bi bi-calendar3 me-2 text-amber"></i> <?= date('d F Y', strtotime($user->created_at)) ?></span>
+                            </div>
+                            <div class="mb-0">
+                                <small class="text-muted fw-bold d-block mb-1">TOTAL PESANAN</small>
+                                <span class="fw-bold"><i class="bi bi-box-seam me-2 text-amber"></i> <?= $total_transaksi ?? 0 ?> Transaksi</span> 
+                            </div>
+                        </div>
+
+                        <div class="mt-5">
+                            <a href="/auth/logout" class="btn btn-outline-danger w-100 rounded-4 fw-bold">
+                                <i class="bi bi-box-arrow-right me-2"></i> Keluar Akun
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!-- KOLOM KANAN: ALAMAT PENGIRIMAN -->
-            <div class="col-md-8">
-                <div class="card border-0 shadow-sm h-100">
-                    <div class="card-header bg-transparent border-0 pt-4 ps-4">
-                        <h5 class="fw-bold mb-0"><i class="fas fa-map-marker-alt me-2 text-danger"></i> Alamat Pengiriman</h5>
-                    </div>
-                    <div class="card-body p-4">
-                        
-                        <!-- LOGIKA: Jika Alamat Sudah Ada -->
-                        <?php if(isset($user->address) && $user->address): ?>
-                            <div class="alert alert-light border shadow-sm">
-                                <div class="d-flex justify-content-between align-items-start">
-                                    <div>
-                                        <h6 class="fw-bold mb-1"><?= esc($user->address->nama_penerima) ?> <span class="text-muted fw-normal">(<?= esc($user->address->no_hp) ?>)</span></h6>
-                                        <p class="mb-1 text-muted small"><?= esc($user->address->alamat_lengkap) ?></p>
-                                        <p class="mb-0 text-muted small">
-                                            <?= esc($user->address->kota) ?>, <?= esc($user->address->provinsi) ?> - <?= esc($user->address->kode_pos) ?>
-                                        </p>
+            <div class="col-lg-8">
+                <div class="profile-card h-100">
+                    <div class="p-4 p-md-5">
+                        <div class="d-flex justify-content-between align-items-center mb-5">
+                            <div>
+                                <h3 class="fw-800 mb-1">Alamat Pengiriman</h3>
+                                <p class="text-muted small mb-0">Kelola lokasi tujuan pengiriman Anda.</p>
+                            </div>
+                            <?php if ($address): ?>
+                                <button class="btn btn-dark rounded-pill px-4 btn-sm fw-bold" onclick="toggleForm()">
+                                    <i class="bi bi-pencil-square me-2"></i> Edit Alamat
+                                </button>
+                            <?php endif; ?>
+                        </div>
+
+                        <?php if (isset($address) && $address): ?>
+                            <div id="addressStatic" class="address-item p-4">
+                                <div class="row align-items-center">
+                                    <div class="col-md-1 d-none d-md-block text-center">
+                                        <div class="bg-white rounded-circle p-2 text-danger shadow-sm">
+                                            <i class="bi bi-geo-alt-fill fs-4"></i>
+                                        </div>
                                     </div>
-                                    <button class="btn btn-sm btn-outline-primary" onclick="toggleForm()"><i class="fas fa-pencil-alt"></i> Edit</button>
+                                    <div class="col-md-11 ps-md-4">
+                                        <h6 class="fw-bold mb-2"><?= esc($address->nama_penerima) ?> <span class="text-muted fw-normal ms-2">• <?= esc($address->no_hp) ?></span></h6>
+                                        <p class="mb-1 opacity-75"><?= esc($address->alamat_lengkap) ?></p>
+                                        <p class="mb-0 fw-bold text-primary small"><?= esc($address->kota) ?>, <?= esc($address->provinsi) ?> - <?= esc($address->kode_pos) ?></p>
+                                    </div>
                                 </div>
                             </div>
                         <?php else: ?>
-                            <!-- Jika Belum Ada Alamat -->
-                            <div class="text-center py-4" id="noAddressMsg">
-                                <img src="https://cdn-icons-png.flaticon.com/512/3710/3710268.png" width="80" class="mb-3 opacity-50" alt="No Address">
-                                <p class="text-muted">Anda belum menambahkan alamat pengiriman.</p>
-                                <button class="btn btn-primary" onclick="toggleForm()">+ Tambah Alamat</button>
+                            <div class="text-center py-5" id="noAddressMsg">
+                                <img src="https://illustrations.popsy.co/slate/delivery-address.svg" style="width: 200px" class="mb-4">
+                                <h5>Belum ada alamat nih...</h5>
+                                <p class="text-muted">Isi alamat agar kami tahu ke mana harus mengirim parfum mu.</p>
+                                <button class="btn btn-dark rounded-pill px-5 py-3 fw-bold mt-3" onclick="toggleForm()">
+                                    + Tambah Alamat Sekarang
+                                </button>
                             </div>
                         <?php endif; ?>
 
-                        <!-- FORM ALAMAT (Disembunyikan Default jika sudah ada alamat) -->
-                        <div id="addressForm" style="display: <?= (isset($user->address) && $user->address) ? 'none' : 'none' ?>;" class="mt-4">
-                            <h6 class="fw-bold border-bottom pb-2 mb-3">Form Alamat</h6>
-                            <form action="/profile/saveAddress" method="post">
-                                <div class="row g-3">
+                        <div id="addressForm" style="display: none;" class="mt-2">
+                            <form action="<?= base_url('profile/saveAddress') ?>" method="POST" id="formAddress">
+                                <?= csrf_field() ?>
+                                
+                                <div class="row g-4">
                                     <div class="col-md-6">
-                                        <label class="form-label small">Nama Penerima</label>
-                                        <input type="text" name="nama_penerima" class="form-control" value="<?= $user->address->nama_penerima ?? '' ?>" required>
+                                        <label class="form-label small fw-bold text-muted">NAMA PENERIMA</label>
+                                        <input 
+                                            type="text" 
+                                            name="nama_penerima" 
+                                            class="form-control" 
+                                            value="<?= isset($address->nama_penerima) ? esc($address->nama_penerima) : '' ?>" 
+                                            required
+                                        >
                                     </div>
                                     <div class="col-md-6">
-                                        <label class="form-label small">No. Handphone</label>
-                                        <input type="text" name="no_hp" class="form-control" value="<?= $user->address->no_hp ?? '' ?>" required>
+                                        <label class="form-label small fw-bold text-muted">NOMOR HANDPHONE</label>
+                                        <input 
+                                            type="tel" 
+                                            name="no_hp" 
+                                            id="inputNoHP"
+                                            class="form-control" 
+                                            value="<?= isset($address->no_hp) ? esc($address->no_hp) : '' ?>" 
+                                            placeholder="08xxxxxxxxxx"
+                                            required
+                                        >
                                     </div>
                                     <div class="col-12">
-                                        <label class="form-label small">Alamat Lengkap</label>
-                                        <textarea name="alamat_lengkap" class="form-control" rows="2" placeholder="Nama Jalan, No. Rumah, RT/RW" required><?= $user->address->alamat_lengkap ?? '' ?></textarea>
+                                        <label class="form-label small fw-bold text-muted">ALAMAT LENGKAP</label>
+                                        <textarea 
+                                            name="alamat_lengkap" 
+                                            class="form-control" 
+                                            rows="3" 
+                                            placeholder="Contoh: Jl. Sukses No. 123, RT 01 RW 02" 
+                                            required
+                                        ><?= isset($address->alamat_lengkap) ? esc($address->alamat_lengkap) : '' ?></textarea>
                                     </div>
                                     <div class="col-md-5">
-                                        <label class="form-label small">Kota/Kabupaten</label>
-                                        <input type="text" name="kota" class="form-control" value="<?= $user->address->kota ?? '' ?>" required>
+                                        <label class="form-label small fw-bold text-muted">KOTA / KABUPATEN</label>
+                                        <input 
+                                            type="text" 
+                                            name="kota" 
+                                            class="form-control" 
+                                            value="<?= isset($address->kota) ? esc($address->kota) : '' ?>" 
+                                            required
+                                        >
                                     </div>
                                     <div class="col-md-4">
-                                        <label class="form-label small">Provinsi</label>
-                                        <input type="text" name="provinsi" class="form-control" value="<?= $user->address->provinsi ?? '' ?>" required>
+                                        <label class="form-label small fw-bold text-muted">PROVINSI</label>
+                                        <input 
+                                            type="text" 
+                                            name="provinsi" 
+                                            class="form-control" 
+                                            value="<?= isset($address->provinsi) ? esc($address->provinsi) : '' ?>"
+                                        >
                                     </div>
                                     <div class="col-md-3">
-                                        <label class="form-label small">Kode Pos</label>
-                                        <input type="text" name="kode_pos" class="form-control" value="<?= $user->address->kode_pos ?? '' ?>" required>
+                                        <label class="form-label small fw-bold text-muted">KODE POS</label>
+                                        <input 
+                                            type="text" 
+                                            name="kode_pos" 
+                                            class="form-control" 
+                                            value="<?= isset($address->kode_pos) ? esc($address->kode_pos) : '' ?>"
+                                        >
                                     </div>
                                 </div>
-                                <div class="mt-3 text-end">
-                                    <button type="button" class="btn btn-light me-2" onclick="toggleForm()">Batal</button>
-                                    <button type="submit" class="btn btn-success">Simpan Alamat</button>
+                                
+                                <div class="mt-5 d-flex gap-3">
+                                    <button type="button" class="btn btn-light rounded-pill px-4 fw-bold" onclick="toggleForm()">Batal</button>
+                                    <button type="submit" class="btn btn-warning rounded-pill px-5 fw-bold shadow-sm">Simpan Perubahan</button>
                                 </div>
                             </form>
                         </div>
-
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
-        // Script Toggle Form Alamat
         function toggleForm() {
-            var form = document.getElementById('addressForm');
-            var msg = document.getElementById('noAddressMsg');
+            const form = document.getElementById('addressForm');
+            const staticInfo = document.getElementById('addressStatic');
+            const emptyInfo = document.getElementById('noAddressMsg');
             
             if (form.style.display === 'none') {
                 form.style.display = 'block';
-                if(msg) msg.style.display = 'none';
+                if(staticInfo) staticInfo.style.display = 'none';
+                if(emptyInfo) emptyInfo.style.display = 'none';
             } else {
                 form.style.display = 'none';
-                if(msg) msg.style.display = 'block';
+                if(staticInfo) staticInfo.style.display = 'block';
+                if(emptyInfo) emptyInfo.style.display = 'block';
             }
         }
 
-        // Script Ganti Tema (Sama seperti sebelumnya)
+        // DEBUG FORM SUBMIT
+        document.getElementById('formAddress')?.addEventListener('submit', function(e) {
+            const noHP = document.getElementById('inputNoHP').value;
+            if (!noHP || noHP.trim() === '') {
+                e.preventDefault();
+                alert('Nomor HP harus diisi!');
+                return false;
+            }
+        });
+
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
-        const htmlElement = document.documentElement;
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(currentTheme);
-
+        
         themeToggleBtn.addEventListener('click', () => {
-            const newTheme = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            setTheme(newTheme);
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
             localStorage.setItem('theme', newTheme);
         });
 
-        function setTheme(theme) {
-            htmlElement.setAttribute('data-bs-theme', theme);
-            if (theme === 'dark') {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-        }
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     </script>
 </body>
 </html>

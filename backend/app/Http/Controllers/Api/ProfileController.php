@@ -4,48 +4,106 @@ namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use App\Models\Address;
+use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\DB;
 
 class ProfileController extends Controller
 {
-    // Ambil Data User + Alamat
-    public function index(Request $request)
-    {
-        // Karena kita pakai API Token/Session, kita ambil user yang sedang login
-        // Note: Untuk simplifikasi tutorial ini tanpa Sanctum Auth yang ribet,
-        // kita akan kirim user_id dari Frontend.
-
-        // Namun idealnya pakai Auth::user().
-        // Kita asumsikan frontend kirim ID user via query param ?user_id=1
-        $user = \App\Models\User::with('address')->find($request->user_id);
-
-        if(!$user) return response()->json(['message' => 'User not found'], 404);
-
-        return response()->json([
-            'success' => true,
-            'data' => $user
-        ]);
-    }
-
-    // Simpan/Update Alamat
     public function updateAddress(Request $request)
     {
-        $request->validate([
-            'user_id' => 'required',
-            'nama_penerima' => 'required',
-            'no_hp' => 'required',
-            'alamat_lengkap' => 'required',
-            'kota' => 'required',
-        ]);
+        Log::info('========== UPDATE ADDRESS START ==========');
+        Log::info('Request data:', $request->all());
 
-        $user = \App\Models\User::find($request->user_id);
+        try {
+            // ✅ Validasi
+            $validated = $request->validate([
+                'user_id' => 'required|integer',
+                'nama_penerima' => 'required|string',
+                'no_hp' => 'required|string',
+                'alamat_lengkap' => 'required|string',
+                'kota' => 'required|string',
+                'provinsi' => 'nullable|string',
+                'kode_pos' => 'nullable|string',
+            ]);
 
-        // Update atau Buat Baru (updateOrCreate)
-        $user->address()->updateOrCreate(
-            ['user_id' => $user->id], // Kondisi pencarian
-            $request->all() // Data yang diupdate/insert
-        );
+            Log::info('Validation passed', $validated);
 
-        return response()->json(['success' => true, 'message' => 'Alamat berhasil disimpan']);
+            // ✅ Cek user exists
+            $userExists = DB::table('users')->where('id', $validated['user_id'])->exists();
+            Log::info('User exists check:', ['exists' => $userExists]);
+
+            if (!$userExists) {
+                Log::warning('User not found: ' . $validated['user_id']);
+                return response()->json([
+                    'success' => false,
+                    'message' => 'User tidak ditemukan'
+                ], 404);
+            }
+
+            // ✅ Update or Create
+            Log::info('Attempting updateOrCreate...');
+            
+            $address = Address::updateOrCreate(
+                ['user_id' => $validated['user_id']],
+                [
+                    'nama_penerima'  => $validated['nama_penerima'],
+                    'no_hp'          => $validated['no_hp'],
+                    'alamat_lengkap' => $validated['alamat_lengkap'],
+                    'kota'           => $validated['kota'],
+                    'provinsi'       => $validated['provinsi'] ?? '',
+                    'kode_pos'       => $validated['kode_pos'] ?? '',
+                ]
+            );
+
+            Log::info('Address saved successfully', ['address_id' => $address->id]);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Alamat berhasil disimpan',
+                'data' => $address
+            ], 200);
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation error:', $e->errors());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Validation error',
+                'errors' => $e->errors()
+            ], 422);
+
+        } catch (\Exception $e) {
+            Log::error('Update Address Error: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyimpan alamat: ' . $e->getMessage()
+            ], 500);
+        } finally {
+            Log::info('========== UPDATE ADDRESS END ==========');
+        }
+    }
+
+    public function getAddress(Request $request)
+    {
+        Log::info('Get address called', $request->all());
+        
+        $userId = $request->input('user_id');
+        
+        $address = Address::where('user_id', $userId)->first();
+
+        if ($address) {
+            return response()->json([
+                'success' => true,
+                'data' => $address
+            ]);
+        }
+
+        return response()->json([
+            'success' => false,
+            'message' => 'Alamat belum ada'
+        ], 404);
     }
 }

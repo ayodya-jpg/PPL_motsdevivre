@@ -1,395 +1,307 @@
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="dark">
+<html lang="id" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title) ?></title>
     
-    <!-- CSS Dependencies -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-    
-    <!-- Google Font (Inter) -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-IoyLJLDukf-pHuqF"></script>
 
     <style>
-        body { 
-            font-family: 'Inter', sans-serif;
-            transition: background-color 0.3s, color 0.3s;
-            background-color: var(--bs-tertiary-bg);
-        }
-        
-        /* --- HEADER STYLE --- */
-        .nav-custom .nav-link { font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; padding: 0.5rem 1rem; opacity: 0.7; transition: 0.2s; }
-        .nav-custom .nav-link:hover, .nav-custom .nav-link.active { opacity: 1; transform: translateY(-2px); }
-        .nav-custom .nav-link i { font-size: 1.3rem; margin-bottom: 4px; }
-
-        /* --- MODERN ORDER CARD --- */
-        .order-card {
-            background-color: var(--bs-body-bg);
-            border: 1px solid var(--bs-border-color-translucent);
-            border-radius: 1rem;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            margin-bottom: 1.5rem;
-        }
-        
-        .order-card:hover {
-            box-shadow: 0 10px 30px rgba(0,0,0,0.08);
-            transform: translateY(-2px);
-        }
-
-        .order-header {
-            padding: 1.25rem;
-            border-bottom: 1px solid var(--bs-border-color-translucent);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
-            gap: 1rem;
-            background-color: rgba(var(--bs-tertiary-bg-rgb), 0.5);
-        }
-
-        .order-body { padding: 1.25rem; }
-
-        .product-item {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1rem;
-            padding-bottom: 1rem;
-            border-bottom: 1px dashed var(--bs-border-color-translucent);
-        }
-        .product-item:last-child {
-            margin-bottom: 0;
-            padding-bottom: 0;
-            border-bottom: none;
-        }
-
-        .product-thumb {
-            width: 70px;
-            height: 70px;
-            object-fit: cover;
-            border-radius: 0.75rem;
-            border: 1px solid var(--bs-border-color);
-        }
-
-        /* --- MODERN BADGES --- */
-        .badge-soft {
-            padding: 0.5em 1em;
-            border-radius: 50rem;
-            font-weight: 600;
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-        
-        .status-pending { background-color: rgba(255, 193, 7, 0.15); color: #ffc107; border: 1px solid rgba(255, 193, 7, 0.2); }
-        .status-dikirim { background-color: rgba(13, 110, 253, 0.15); color: #0d6efd; border: 1px solid rgba(13, 110, 253, 0.2); }
-        .status-selesai { background-color: rgba(25, 135, 84, 0.15); color: #198754; border: 1px solid rgba(25, 135, 84, 0.2); }
-        .status-batal   { background-color: rgba(220, 53, 69, 0.15); color: #dc3545; border: 1px solid rgba(220, 53, 69, 0.2); }
-
-        [data-bs-theme="light"] .status-pending { color: #997404; background-color: #fff3cd; }
-        [data-bs-theme="light"] .status-dikirim { color: #084298; background-color: #cfe2ff; }
-        [data-bs-theme="light"] .status-selesai { color: #0f5132; background-color: #d1e7dd; }
-        [data-bs-theme="light"] .status-batal   { color: #842029; background-color: #f8d7da; }
-
-        /* --- SHIPPING INFO BOX --- */
-        .shipping-box {
-            background-color: rgba(13, 202, 240, 0.08);
-            border-radius: 0.75rem;
-            padding: 1rem;
-            margin-top: 1rem;
-            border: 1px solid rgba(13, 202, 240, 0.2);
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-        }
-
-        /* --- NAV TABS --- */
-        .nav-pills .nav-link {
-            border-radius: 50rem;
-            padding: 0.6rem 1.5rem;
-            font-weight: 600;
-            color: var(--bs-body-color);
-            transition: 0.3s;
-            border: 1px solid transparent;
-        }
-        .nav-pills .nav-link:hover { background-color: var(--bs-secondary-bg); }
-        .nav-pills .nav-link.active {
-            background-color: var(--bs-primary);
-            color: white;
-            box-shadow: 0 4px 10px rgba(13, 110, 253, 0.3);
-        }
+        :root { --primary-slate: #0f172a; --accent-amber: #fbbf24; --bg-light: #f8fafc; --card-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.08); }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background-color: var(--bg-light); color: var(--primary-slate); transition: all 0.3s ease; }
+        .double-header { background: rgba(255, 255, 255, 0.8) !important; backdrop-filter: blur(10px); border-bottom: 1px solid rgba(0,0,0,0.05); }
+        .brand-logo { background: var(--primary-slate); color: var(--accent-amber) !important; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-weight: 800; }
+        .nav-custom .nav-link { font-weight: 600; color: #64748b !important; padding: 0.5rem 1.2rem; border-radius: 12px; }
+        .nav-custom .nav-link.active { color: var(--primary-slate) !important; background: rgba(0,0,0,0.03); }
+        .nav-pills .nav-link { border-radius: 14px; color: #64748b; font-weight: 700; padding: 12px 24px; transition: all 0.3s; }
+        .nav-pills .nav-link.active { background-color: var(--primary-slate) !important; color: white !important; box-shadow: 0 10px 20px rgba(15, 23, 42, 0.2); }
+        .order-card { border: none; border-radius: 28px; background: #ffffff; box-shadow: var(--card-shadow); margin-bottom: 24px; overflow: hidden; transition: transform 0.3s; }
+        .order-card:hover { transform: translateY(-5px); }
+        .order-header { padding: 20px 25px; background: #fcfcfd; border-bottom: 1px solid #f1f5f9; }
+        .product-thumb { width: 64px; height: 64px; object-fit: cover; border-radius: 14px; background: #f1f5f9; }
+        .badge-status { padding: 8px 16px; border-radius: 12px; font-size: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+        .shipping-info-box { background: #f8fafc; border-radius: 18px; padding: 15px 20px; border: 1px solid #f1f5f9; }
+        .theme-toggle-btn { background: #f1f5f9; border: none; padding: 10px 18px; border-radius: 14px; }
+        [data-bs-theme="dark"] { --bg-light: #0f172a; --primary-slate: #f8fafc; }
+        [data-bs-theme="dark"] .order-card { background: #1e293b; }
+        [data-bs-theme="dark"] .order-header { background: #1e293b; border-color: #334155; }
+        [data-bs-theme="dark"] .shipping-info-box { background: #0f172a; border-color: #334155; }
+        [data-bs-theme="dark"] .double-header { background: rgba(15, 23, 42, 0.9) !important; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER -->
-    <header class="mb-5 shadow-sm bg-body-tertiary sticky-top">
-        <div class="header-top py-2 border-bottom border-secondary border-opacity-10">
+    <header class="double-header sticky-top mb-5">
+        <div class="header-top py-3">
             <div class="container d-flex justify-content-between align-items-center">
-                <a class="navbar-brand fw-bold d-flex align-items-center text-decoration-none fs-4" href="/shop">
-                    <span class="bg-warning text-white rounded-3 px-2 me-2 fs-5 d-flex align-items-center justify-content-center shadow-sm" style="width: 36px; height: 36px;">VR</span> 
-                    <span class="text-body fw-bold">Mots De Vivre</span>
+                <a class="navbar-brand fw-bolder d-flex align-items-center text-decoration-none fs-4" href="/shop">
+                    <div class="brand-logo me-2">DV</div> 
+                    <span class="text-body tracking-tighter">Mots De Vivre</span>
                 </a>
-                
-                <div class="d-flex align-items-center gap-3">
-                    <nav class="nav nav-custom d-none d-md-flex">
-                        <a class="nav-link text-body" href="/shop"><i class="bi bi-house"></i> Home</a>
-                        <a class="nav-link text-body position-relative" href="/cart">
-                            <i class="bi bi-bag"></i> Cart
-                            <?php if(isset($cart_count) && $cart_count > 0): ?>
-                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger shadow-sm border border-2 border-white" style="font-size: 0.6rem;"><?= $cart_count ?></span>
-                            <?php endif; ?>
-                        </a>
-                        <a class="nav-link active text-warning fw-bold" href="/orders"><i class="bi bi-receipt"></i> Orders</a>
-                        <a class="nav-link text-body" href="/profile"><i class="bi bi-person-fill"></i> Profile</a>
+                <div class="d-flex align-items-center gap-2">
+                    <nav class="nav nav-custom d-none d-lg-flex me-3">
+                        <a class="nav-link" href="/shop">Home</a>
+                        <a class="nav-link" href="/cart">Cart <span class="badge bg-danger rounded-pill"><?= $cart_count ?? 0 ?></span></a>
+                        <a class="nav-link active" href="/orders">Orders</a>
+                        <a class="nav-link" href="/profile">Profile</a>
                     </nav>
-                    <button class="btn btn-outline-secondary btn-sm rounded-circle p-2" style="width: 38px; height: 38px;" id="themeToggle"><i class="fas fa-sun" id="themeIcon"></i></button>
-                    
-                    <button class="btn btn-outline-secondary d-md-none" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
+                    <button class="theme-toggle-btn" id="themeToggle"><i class="fas fa-sun" id="themeIcon"></i></button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- KONTEN UTAMA -->
     <div class="container pb-5">
-        
-        <div class="d-flex align-items-center justify-content-between mb-4">
-            <h2 class="fw-bold m-0 text-body-emphasis"><i class="bi bi-clock-history me-2 text-warning"></i> Riwayat Pesanan</h2>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center gap-3 mb-5">
+            <div>
+                <h2 class="fw-800 m-0">Riwayat Pesanan</h2>
+                <p class="text-muted small mb-0">Pantau status pengiriman pesanan Anda.</p>
+            </div>
+            
+            <ul class="nav nav-pills bg-white p-2 rounded-4 shadow-sm" id="orderTabs" role="tablist">
+                <li class="nav-item">
+                    <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#ongoing">📦 Berjalan</button>
+                </li>
+                <li class="nav-item">
+                    <button class="nav-link" data-bs-toggle="tab" data-bs-target="#completed">✅ Selesai</button>
+                </li>
+            </ul>
         </div>
 
-        <!-- TABS NAVIGASI -->
-        <ul class="nav nav-pills mb-4 gap-2" id="orderTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="ongoing-tab" data-bs-toggle="tab" data-bs-target="#ongoing" type="button" role="tab">
-                    Sedang Berjalan 
-                    <?php if(count($ongoing) > 0): ?>
-                        <span class="badge bg-white text-primary ms-2 shadow-sm border"><?= count($ongoing) ?></span>
-                    <?php endif; ?>
-                </button>
-            </li>
-            <li class="nav-item" role="presentation">
-                <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab">
-                    Selesai / Batal
-                    <?php if(count($completed) > 0): ?>
-                        <span class="badge bg-secondary bg-opacity-25 text-body ms-2"><?= count($completed) ?></span>
-                    <?php endif; ?>
-                </button>
-            </li>
-        </ul>
-
-        <div class="tab-content" id="orderTabsContent">
-            
-            <!-- TAB 1: on going-->
-            <div class="tab-pane fade show active" id="ongoing" role="tabpanel">
-                <?php if(empty($ongoing)): ?>
-                    <div class="text-center py-5 opacity-50">
-                        <i class="bi bi-box2 fa-4x mb-3 d-block text-secondary"></i>
-                        <h5 class="fw-light">Tidak ada pesanan yang sedang berjalan.</h5>
-                        <a href="/shop" class="btn btn-primary mt-3 rounded-pill px-4 fw-bold">Mulai Belanja</a>
-                    </div>
-                <?php else: ?>
-                    <?php foreach($ongoing as $order): ?>
-                        <div class="order-card shadow-sm">
-                            <div class="order-header">
-                                <div class="d-flex align-items-center gap-3">
-                                    <div class="bg-primary bg-opacity-10 p-2 rounded-circle text-primary">
-                                        <i class="bi bi-receipt fs-5"></i>
-                                    </div>
-                                    <div>
-                                        <div class="fw-bold">Order #<?= $order->id ?></div>
-                                        <small class="text-secondary d-flex align-items-center gap-1">
-                                            <i class="bi bi-calendar3"></i>
-                                            <?php 
-                                                try {
-                                                    $date = new DateTime($order->created_at, new DateTimeZone('UTC'));
-                                                    $date->setTimezone(new DateTimeZone('Asia/Jakarta'));
-                                                    echo $date->format('d M Y, H:i');
-                                                } catch(Exception $e) { echo date('d M Y, H:i', strtotime($order->created_at)); }
-                                            ?> WIB
-                                        </small>
-                                    </div>
-                                </div>
-                                <span class="badge-soft status-<?= strtolower($order->status) ?>">
-                                    <?= strtoupper($order->status) ?>
-                                </span>
-                            </div>
-                            
-                            <div class="order-body">
-                                <!-- HITUNG SUBTOTAL PRODUK -->
-                                <?php 
-                                    $subtotalProduk = 0;
-                                    foreach($order->details as $detail): 
-                                        $subtotalProduk += $detail->jumlah * $detail->harga_saat_ini;
-                                ?>
-                                <div class="product-item">
-                                    <?php if($detail->product && $detail->product->gambar): ?>
-                                        <img src="http://localhost:8000/storage/<?= $detail->product->gambar ?>" class="product-thumb">
-                                    <?php else: ?>
-                                        <div class="product-thumb bg-secondary d-flex align-items-center justify-content-center text-white"><i class="bi bi-image"></i></div>
-                                    <?php endif; ?>
-                                    
-                                    <div class="flex-grow-1">
-                                        <div class="d-flex justify-content-between align-items-start mb-1">
-                                            <h6 class="fw-bold text-body-emphasis mb-0"><?= $detail->product->nama_produk ?? 'Produk Dihapus' ?></h6>
-                                            <span class="fw-bold text-body">Rp <?= number_format($detail->jumlah * $detail->harga_saat_ini, 0, ',', '.') ?></span>
-                                        </div>
-                                        <div class="text-secondary small">
-                                            <?= $detail->jumlah ?> barang x Rp <?= number_format($detail->harga_saat_ini, 0, ',', '.') ?>
-                                        </div>
-                                    </div>
-                                </div>
-                                <?php endforeach; ?>
-                                
-                                <!-- INFO ESTIMASI -->
-                                <div class="shipping-box">
-                                    <div class="text-info fs-3"><i class="bi bi-truck"></i></div>
-                                    <div class="flex-grow-1">
-                                        <small class="text-secondary text-uppercase fw-bold" style="font-size: 0.7rem;">Pengiriman</small>
-                                        <div class="fw-bold text-body-emphasis"><?= esc($order->shipping_method ?? '-') ?></div>
-                                        <div class="text-info fw-semibold small">
-                                            <?= esc($order->shipping_estimation ?? 'Estimasi tidak tersedia') ?>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <!-- RINCIAN BIAYA & DISKON -->
-                                <div class="bg-body-tertiary p-3 rounded-3 mt-3">
-                                    <div class="d-flex justify-content-between mb-1 small text-secondary">
-                                        <span>Subtotal Produk</span>
-                                        <span>Rp <?= number_format($subtotalProduk, 0, ',', '.') ?></span>
-                                    </div>
-                                    <div class="d-flex justify-content-between mb-1 small text-secondary">
-                                        <span>Biaya Pengiriman</span>
-                                        <span>Rp <?= number_format($order->shipping_cost, 0, ',', '.') ?></span>
-                                    </div>
-
-                                    <!-- LOGIKA HITUNG DISKON -->
-                                    <?php 
-                                        $totalNormal = $subtotalProduk + $order->shipping_cost;
-                                        $diskon = $totalNormal - $order->total_harga;
-                                    ?>
-
-                                    <?php if($diskon > 0): ?>
-                                        <div class="d-flex justify-content-between mb-1 small text-success fw-bold">
-                                            <span><i class="bi bi-ticket-perforated-fill me-1"></i> Total Diskon (Promo)</span>
-                                            <span>-Rp <?= number_format($diskon, 0, ',', '.') ?></span>
-                                        </div>
-                                    <?php endif; ?>
-
-                                    <hr class="border-secondary border-opacity-25 my-2">
-                                    
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <div class="small">
-                                            <span class="text-secondary d-block">Metode Bayar</span>
-                                            <span class="fw-semibold text-body"><?= esc($order->payment_method ?? '-') ?></span>
-                                        </div>
-                                        <div class="text-end">
-                                            <span class="text-secondary d-block small">Total Bayar</span>
-                                            <span class="fs-5 fw-bold text-success">Rp <?= number_format($order->total_harga, 0, ',', '.') ?></span>
-                                        </div>
-                                    </div>
-                                </div>
-
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php endif; ?>
+        <div class="tab-content">
+            <div class="tab-pane fade show active" id="ongoing">
+                <div class="text-center py-5"><div class="spinner-border text-warning" role="status"></div><p class="mt-2 text-muted small">Memuat pesanan...</p></div>
             </div>
-
-            <!-- TAB 2: SELESAI / BATAL -->
-            <div class="tab-pane fade" id="completed" role="tabpanel">
-                <?php if(empty($completed)): ?>
-                    <div class="text-center py-5 opacity-50">
-                        <i class="bi bi-clipboard-check fa-4x mb-3 d-block text-secondary"></i>
-                        <h5 class="fw-light">Belum ada riwayat pesanan selesai.</h5>
-                    </div>
-                <?php else: ?>
-                    <div class="row">
-                        <?php foreach($completed as $order): ?>
-                        <div class="col-md-6 col-lg-12 col-xl-6">
-                            <div class="order-card h-100 opacity-75" style="filter: grayscale(0.1);">
-                                <div class="order-header">
-                                    <div class="d-flex align-items-center gap-3">
-                                        <div class="bg-secondary bg-opacity-10 p-2 rounded-circle text-body">
-                                            <i class="bi bi-archive fs-5"></i>
-                                        </div>
-                                        <div>
-                                            <div class="fw-bold">Order #<?= $order->id ?></div>
-                                            <small class="text-secondary">
-                                                <?= date('d M Y', strtotime($order->created_at)) ?>
-                                            </small>
-                                        </div>
-                                    </div>
-                                    
-                                    <?php if ($order->status == 'batal'): ?>
-                                        <span class="badge-soft status-batal">DIBATALKAN</span>
-                                    <?php else: ?>
-                                        <span class="badge-soft status-selesai">SELESAI</span>
-                                    <?php endif; ?>
-                                </div>
-                                
-                                <div class="order-body">
-                                    <?php 
-                                        $subtotalProduk = 0;
-                                        foreach($order->details as $detail): 
-                                            $subtotalProduk += $detail->jumlah * $detail->harga_saat_ini;
-                                    ?>
-                                    <div class="d-flex justify-content-between align-items-center mb-2">
-                                        <div>
-                                            <span class="fw-semibold text-body-emphasis small"><?= $detail->product->nama_produk ?? 'Produk Dihapus' ?></span>
-                                            <span class="text-secondary small ms-1">x<?= $detail->jumlah ?></span>
-                                        </div>
-                                        <span class="small fw-bold text-body">Rp <?= number_format($detail->jumlah * $detail->harga_saat_ini, 0, ',', '.') ?></span>
-                                    </div>
-                                    <?php endforeach; ?>
-                                    
-                                    <hr class="my-3 border-secondary border-opacity-10">
-                                    
-                                    <!-- RINCIAN SINGKAT -->
-                                    <div class="d-flex justify-content-between align-items-center">
-                                        <span class="fw-bold text-body-secondary">Total Akhir</span>
-                                        <span class="fw-bold text-body-emphasis fs-5">Rp <?= number_format($order->total_harga, 0, ',', '.') ?></span>
-                                    </div>
-                                    
-                                    <div class="text-end mt-3">
-                                        <button class="btn btn-sm btn-outline-primary rounded-pill px-3">Beli Lagi</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <?php endforeach; ?>
-                    </div>
-                <?php endif; ?>
+            <div class="tab-pane fade" id="completed">
+                <div class="text-center py-5 text-muted">Belum ada riwayat selesai</div>
             </div>
-
         </div>
     </div>
 
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     
-    <!-- Script Tema -->
     <script>
+        // --- 1. SETUP TEMA ---
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
-        const htmlElement = document.documentElement;
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(currentTheme);
         themeToggleBtn.addEventListener('click', () => {
-            const newTheme = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            setTheme(newTheme);
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
             localStorage.setItem('theme', newTheme);
         });
-        function setTheme(theme) {
-            htmlElement.setAttribute('data-bs-theme', theme);
-            if (theme === 'dark') { themeIcon.classList.remove('fa-moon'); themeIcon.classList.add('fa-sun'); } 
-            else { themeIcon.classList.remove('fa-sun'); themeIcon.classList.add('fa-moon'); }
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
+
+        // --- 2. LOGIKA UTAMA FETCH ORDER ---
+        const API_BASE_URL = 'http://localhost:8090/api'; // Pastikan PORT sesuai Docker Backend
+        const userId = <?= session()->get('user_id') ?? 0 ?>;
+
+        async function loadOrders() {
+        if (!userId) {
+            document.getElementById('ongoing').innerHTML = `<div class="text-center py-5 text-muted">Silakan login terlebih dahulu.</div>`;
+            return;
         }
-        
+
+        try {
+            // 1. Ambil Data Awal
+            let response = await fetch(`${API_BASE_URL}/orders/history?user_id=${userId}`);
+            if (!response.ok) throw new Error(`HTTP Error: ${response.status}`);
+            let result = await response.json();
+
+            if (result.success && result.data.length > 0) {
+                
+                // Cek apakah ada order yang statusnya masih 'unpaid'
+                const hasUnpaidOrders = result.data.some(o => o.status === 'unpaid' && o.transaction_id);
+
+                if (hasUnpaidOrders) {
+                    // Tampilkan indikator loading kecil agar user tahu sedang cek status
+                    // (Opsional, tapi bagus untuk UX)
+                    console.log("Mengecek status pembayaran ke Midtrans...");
+                    
+                    // 2. Lakukan Sinkronisasi (Update Database Backend)
+                    await syncUnpaidOrders(result.data);
+
+                    // 3. ⚠️ PENTING: Ambil Data Ulang (Re-Fetch) setelah Database diupdate
+                    // Agar status 'pending' (Dikemas) yang baru muncul di layar
+                    response = await fetch(`${API_BASE_URL}/orders/history?user_id=${userId}`);
+                    result = await response.json();
+                }
+
+                // 4. Render Data Terbaru
+                renderOrders(result.data);
+            } else {
+                renderEmptyState();
+            }
+        } catch (error) {
+            console.error('Error:', error);
+            document.getElementById('ongoing').innerHTML = `
+                <div class="text-center py-5 text-danger">
+                    <i class="bi bi-wifi-off fs-1 mb-2"></i><br>
+                    Gagal memuat data.<br><small>Pastikan Backend aktif & CORS diizinkan.</small>
+                </div>`;
+        }
+    }
+
+        // Fungsi Sync: Trigger backend untuk cek Midtrans jika status masih unpaid
+        async function syncUnpaidOrders(orders) {
+            const unpaidOrders = orders.filter(o => o.status === 'unpaid' && o.transaction_id);
+            
+            // Loop parallel requests untuk efisiensi
+            const syncPromises = unpaidOrders.map(order => 
+                fetch(`${API_BASE_URL}/orders/${order.id}/payment-status`).catch(e => console.log(e))
+            );
+            
+            if (syncPromises.length > 0) {
+                await Promise.all(syncPromises);
+                // Kita tidak perlu menunggu hasil fetch, cukup trigger saja agar backend update DB
+            }
+        }
+
+        function renderOrders(orders) {
+            const ongoingTab = document.getElementById('ongoing');
+            const completedTab = document.getElementById('completed');
+            let ongoingHTML = '';
+            let completedHTML = '';
+
+            orders.forEach(order => {
+                const status = order.status.toLowerCase();
+                const cardHTML = createOrderCard(order);
+
+                // --- LOGIKA PEMBAGIAN TAB ---
+                // BERJALAN: Unpaid (Belum Bayar), Pending (Dikemas), Dikirim
+                // Note: settlement/capture dianggap sama dengan pending (dikemas)
+                if (['unpaid', 'pending', 'dikirim', 'settlement', 'capture'].includes(status)) {
+                    ongoingHTML += cardHTML;
+                } 
+                // SELESAI: Selesai, Batal, Expire, Deny
+                else {
+                    completedHTML += cardHTML;
+                }
+            });
+
+            ongoingTab.innerHTML = ongoingHTML || getEmptyStateHTML('Belum ada pesanan aktif');
+            completedTab.innerHTML = completedHTML || getEmptyStateHTML('Belum ada riwayat selesai');
+        }
+
+        function createOrderCard(order) {
+            const date = new Date(order.created_at);
+            const formattedDate = date.toLocaleDateString('id-ID', {
+                day: '2-digit', month: 'short', year: 'numeric', hour: '2-digit', minute: '2-digit'
+            });
+
+            // --- MAPPING STATUS & WARNA ---
+            let badgeClass = 'bg-secondary';
+            let statusLabel = order.status.toUpperCase();
+            let showPayButton = false;
+
+            switch(order.status.toLowerCase()) {
+                case 'unpaid': 
+                    badgeClass = 'bg-danger text-white'; 
+                    statusLabel = 'MENUNGGU PEMBAYARAN';
+                    showPayButton = true;
+                    break;
+                case 'pending': 
+                case 'settlement':
+                case 'capture':
+                    badgeClass = 'bg-warning text-dark'; 
+                    statusLabel = 'SEDANG DIKEMAS'; // Status setelah lunas
+                    break;
+                case 'dikirim': 
+                    badgeClass = 'bg-primary text-white'; 
+                    statusLabel = 'SEDANG DIKIRIM';
+                    break;
+                case 'selesai': 
+                    badgeClass = 'bg-success text-white'; 
+                    statusLabel = 'SELESAI';
+                    break;
+                case 'batal': 
+                case 'expire':
+                case 'deny':
+                    badgeClass = 'bg-secondary text-white'; 
+                    statusLabel = 'DIBATALKAN';
+                    break;
+            }
+
+            // Render Produk
+            let productsHTML = '';
+            if(order.details) {
+                order.details.forEach(detail => {
+                    const img = detail.product && detail.product.gambar 
+                        ? `http://localhost:8090/storage/${detail.product.gambar}` 
+                        : 'https://via.placeholder.com/64';
+                    
+                    productsHTML += `
+                        <div class="d-flex align-items-center gap-3 mb-2">
+                            <img src="${img}" class="product-thumb" style="width:50px; height:50px; object-fit:cover; border-radius:8px;">
+                            <div class="flex-grow-1">
+                                <p class="fw-bold mb-0 small">${detail.product ? detail.product.nama_produk : 'Produk'}</p>
+                                <small class="text-muted">${detail.jumlah} x Rp ${new Intl.NumberFormat('id-ID').format(detail.harga_saat_ini)}</small>
+                            </div>
+                        </div>`;
+                });
+            }
+
+            // Render Tombol Bayar
+            const payBtn = (showPayButton && order.snap_token) 
+                ? `<button onclick="continuePayment('${order.snap_token}')" class="btn btn-danger btn-sm fw-bold w-100 mt-2 shadow-sm">BAYAR SEKARANG</button>` 
+                : '';
+
+            return `
+                <div class="order-card mb-3 border rounded-4 overflow-hidden bg-white shadow-sm">
+                    <div class="order-header px-4 py-3 bg-light border-bottom d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6 class="fw-bold mb-0">Order #${order.transaction_id || order.id}</h6>
+                            <small class="text-muted">${formattedDate} WIB</small>
+                        </div>
+                        <span class="badge ${badgeClass} rounded-pill px-3 py-2 fw-bold" style="font-size:0.75rem; letter-spacing:0.5px;">${statusLabel}</span>
+                    </div>
+                    <div class="p-4">
+                        ${productsHTML}
+                        <hr class="my-3 opacity-10">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <span class="small text-muted fw-bold">TOTAL BELANJA</span>
+                            <h5 class="fw-black text-primary mb-0">Rp ${new Intl.NumberFormat('id-ID').format(order.total_harga)}</h5>
+                        </div>
+                        ${payBtn}
+                    </div>
+                </div>
+            `;
+        }
+
+        function getEmptyStateHTML(msg) {
+            return `<div class="text-center py-5 opacity-50"><i class="bi bi-inbox fs-1 d-block mb-3"></i><h5>${msg}</h5></div>`;
+        }
+
+        function renderEmptyState() {
+            document.getElementById('ongoing').innerHTML = getEmptyStateHTML('Belum ada pesanan aktif');
+            document.getElementById('completed').innerHTML = getEmptyStateHTML('Belum ada riwayat selesai');
+        }
+
+        function continuePayment(token) {
+            console.log("Membuka Snap Token:", token);
+            if (typeof window.snap === 'undefined') {
+                alert('Sistem pembayaran gagal dimuat. Coba refresh halaman.');
+                return;
+            }
+            window.snap.pay(token, {
+                onSuccess: function(result){ location.reload(); },
+                onPending: function(result){ location.reload(); },
+                onError: function(result){ location.reload(); },
+                onClose: function(){ /* User menutup popup, tidak perlu aksi */ }
+            });
+        }
+
+        // Load data saat halaman dibuka
+        loadOrders();
     </script>
 </body>
 </html>

@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Admin\SubscriptionAdminController;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,7 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// ✅ Route admin untuk melihat daftar langganan
+Route::get('/admin/subscriptions', [SubscriptionAdminController::class, 'index'])
+    ->name('admin.subscriptions.index');

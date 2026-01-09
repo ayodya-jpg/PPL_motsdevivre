@@ -6,7 +6,8 @@ use App\Controllers\BaseController;
 
 class Products extends BaseController
 {
-    private $api_url = 'http://localhost:8000/api/products';
+    // ← UBAH: localhost:8090 → nginx_server
+    private $api_url = 'http://nginx_server/api/products';
 
     // 1. FORM TAMBAH PRODUK
     public function create()
@@ -19,7 +20,6 @@ class Products extends BaseController
     {
         $client = \Config\Services::curlrequest();
 
-        // Ambil data input
         $postData = [
             'nama_produk' => $this->request->getPost('nama_produk'),
             'harga'       => $this->request->getPost('harga'),
@@ -27,15 +27,12 @@ class Products extends BaseController
             'deskripsi'   => $this->request->getPost('deskripsi'),
         ];
 
-        // Ambil File Gambar
         $img = $this->request->getFile('gambar');
         if ($img && $img->isValid()) {
-            // Siapkan file untuk dikirim via CURL
             $postData['gambar'] = new \CURLFile($img->getTempName(), $img->getClientMimeType(), $img->getName());
         }
 
         try {
-            // Kirim sebagai Multipart Form Data
             $response = $client->post($this->api_url, [
                 'multipart' => $postData
             ]);
@@ -71,7 +68,7 @@ class Products extends BaseController
             'harga'       => $this->request->getPost('harga'),
             'stok'        => $this->request->getPost('stok'),
             'deskripsi'   => $this->request->getPost('deskripsi'),
-            '_method'     => 'PUT' // TRICK: Laravel butuh ini untuk update via POST multipart
+            '_method'     => 'PUT'
         ];
 
         $img = $this->request->getFile('gambar');
@@ -80,8 +77,6 @@ class Products extends BaseController
         }
 
         try {
-            // Kita pakai POST tapi kirim _method=PUT di body agar Laravel menganggapnya PUT
-            // Ini workaround karena cURL sulit kirim file via method PUT asli
             $response = $client->post($this->api_url . '/' . $id, [
                 'multipart' => $postData
             ]);

@@ -22,8 +22,17 @@ class DatabaseSeeder extends Seeder
 
         // 2. Buat Akun PELANGGAN
         DB::table('users')->insert([
-            'name' => 'Budi Pelanggan',
-            'email' => 'budi@gmail.com',
+            'name' => 'Test Pelanggan',
+            'email' => 'test@gmail.com',
+            'password' => Hash::make('password123'), // Password: password123
+            'role' => 'pelanggan',
+            'created_at' => now(),
+            'updated_at' => now(),
+        ]);
+
+         DB::table('users')->insert([
+            'name' => 'Adam Pelanggan',
+            'email' => 'adam@gmail.com',
             'password' => Hash::make('password123'), // Password: password123
             'role' => 'pelanggan',
             'created_at' => now(),
@@ -33,27 +42,23 @@ class DatabaseSeeder extends Seeder
         // 3. Buat Produk Dummy
         DB::table('products')->insert([
             [
-                'nama_produk' => 'Mots De Vivre-radiant Blis',
-                'deskripsi' => 'parfum unisex
-                cocok untuk kegiatan outdoor
-                ketika terkena keringat, aroma parfum lebih keluar',
+                'nama_produk' => 'Mots De Vivre - Radiant Bliss',
+                'deskripsi' => 'Extrait De Parfum',
                 'harga' => 114000,
                 'stok' => 10,
-                'gambar' => 'images/radiant_bliss.jpeg',
+                'gambar' => '', // Nanti kita urus gambar
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
             [
                 'nama_produk' => 'Mots De Vivre - Secret Desire',
-                'deskripsi' => 'parfum unisex
-                cocok untuk kegiatan formal (undangan nikahan, dll)
-                manis',
+                'deskripsi' => 'Extrait De Parfum',
                 'harga' => 114000,
                 'stok' => 50,
-                'gambar' => 'images/Secret_desire.jpeg',
+                'gambar' => '',
                 'created_at' => now(),
                 'updated_at' => now(),
-            ],
+            ]
         ]);
     }
 }

@@ -30,7 +30,7 @@
             <label>Ganti Gambar (Biarkan kosong jika tidak ingin mengganti)</label>
             <br>
             <?php if($product->gambar): ?>
-                <img src="http://localhost:8000/storage/<?= $product->gambar ?>" width="100" style="margin-bottom: 10px;">
+                <img src="http://localhost:8090/storage/<?= $product->gambar ?>" width="100" style="margin-bottom: 10px;">
             <?php endif; ?>
             <input type="file" name="gambar" accept="image/*">
 

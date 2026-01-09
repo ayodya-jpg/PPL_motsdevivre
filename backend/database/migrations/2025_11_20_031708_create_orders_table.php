@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('user_id'); // Siapa yang beli
             $table->integer('total_harga');
-            $table->enum('status', ['pending', 'dibayar', 'dikirim', 'selesai'])->default('pending');
+            $table->enum('status', ['unpaid', 'pending', 'dikirim', 'selesai', 'batal'])->default('unpaid');
             $table->timestamps();
         });
     }

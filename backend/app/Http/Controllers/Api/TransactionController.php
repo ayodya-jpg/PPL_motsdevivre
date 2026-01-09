@@ -7,122 +7,230 @@ use Illuminate\Http\Request;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
-use App\Models\User; // [PENTING] Tambahkan Model User
+use App\Models\UserPromo;
 use Illuminate\Support\Facades\DB;
 
 class TransactionController extends Controller
 {
-    // --- FUNGSI CHECKOUT (UPDATED: Hapus Promo Setelah Dipakai) ---
+    /**
+     * Checkout: Memproses pembelian produk.
+     * Status Awal: 'unpaid' (Menunggu Pembayaran)
+     */
     public function checkout(Request $request)
     {
-        // Validasi Input
-        $request->validate([
-            'user_id' => 'required',
-            'items' => 'required|array',
-            'total_harga' => 'required|numeric',
-            'payment_method' => 'required',
-            'shipping_method' => 'required',
-            'shipping_cost' => 'required|numeric',
-            'shipping_estimation' => 'required',
-            'delivery_address' => 'required'
-        ]);
-
         DB::beginTransaction();
         try {
+            // Setup Midtrans
+            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+            \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+            \Midtrans\Config::$isSanitized = true;
+            \Midtrans\Config::$is3ds = true;
+
+            // Sanitize total
+            $totalRaw = preg_replace('/[^0-9]/', '', $request->total_harga);
+            $total = (int) $totalRaw;
+
+            // Generate unique transaction ID
+            $transactionId = 'TJS-' . time() . '-' . rand(1000, 9999);
+
             // 1. Buat Order Baru
+            // UPDATE: Status awal 'unpaid' agar masuk ke logika "Menunggu Pembayaran"
             $order = Order::create([
                 'user_id' => $request->user_id,
-                'total_harga' => $request->total_harga,
-                'status' => 'pending',
-                'payment_method' => $request->payment_method,
-                'shipping_method' => $request->shipping_method,
-                'shipping_cost' => $request->shipping_cost,
-                'shipping_estimation' => $request->shipping_estimation,
-                'delivery_address' => $request->delivery_address,
+                'total_harga' => $total,
+                'status' => 'unpaid',
+                'transaction_id' => $transactionId,
+                'snap_token' => null
             ]);
 
-            // 2. Proses Item & Kurangi Stok
+            // 2. Loop Barang yang dibeli
             foreach ($request->items as $item) {
-                $product = Product::find($item['id']);
+                $product = Product::find($item['product_id']);
 
-                if (!$product) {
-                    throw new \Exception("Produk dengan ID " . $item['id'] . " tidak ditemukan.");
+                if (!$product || $product->stok < $item['jumlah']) {
+                    throw new \Exception("Stok " . ($product ? $product->nama_produk : 'Produk') . " habis.");
                 }
 
-                // Cek Stok
-                if($product->stok < $item['qty']) {
-                    throw new \Exception("Stok " . $product->nama_produk . " tidak mencukupi (Sisa: " . $product->stok . ")");
-                }
+                // 3. KURANGI STOK
+                $product->decrement('stok', $item['jumlah']);
 
-                // KURANGI STOK
-                $product->decrement('stok', $item['qty']);
-
-                // Simpan Detail Order
                 OrderDetail::create([
                     'order_id' => $order->id,
                     'product_id' => $product->id,
-                    'jumlah' => $item['qty'],
+                    'jumlah' => $item['jumlah'],
                     'harga_saat_ini' => $product->harga
                 ]);
             }
 
-            // --- [LOGIKA BARU] HAPUS PROMO JIKA DIPAKAI ---
-            // Cek user di database
-            $user = User::find($request->user_id);
-            // Jika user punya promo 'NEWUSER20_FREESHIP' saat checkout ini terjadi
-            if ($user && $user->promo_code === 'NEWUSER20_FREESHIP') {
-                // Hapus promo agar tidak bisa dipakai lagi (Set jadi NULL)
-                $user->update(['promo_code' => null]);
+            // 4. Generate Midtrans Snap Token
+            $params = [
+                'transaction_details' => [
+                    'order_id' => $transactionId,
+                    'gross_amount' => $total,
+                ],
+                'customer_details' => [
+                    'first_name' => $request->name ?? 'Customer',
+                    'email' => $request->email ?? 'customer@example.com',
+                ],
+            ];
+
+            $snapToken = \Midtrans\Snap::getSnapToken($params);
+
+            // 5. Update order dengan snap_token
+            $order->snap_token = $snapToken;
+            $order->save();
+
+            // 6. Proses Voucher
+            if ($request->has('promo_codes') && !empty($request->promo_codes)) {
+                UserPromo::where('user_id', $request->user_id)
+                    ->whereIn('promo_code', $request->promo_codes)
+                    ->update([
+                        'is_used' => true,
+                        'updated_at' => now()
+                    ]);
             }
-            // ----------------------------------------------
 
             DB::commit();
-            return response()->json(['success' => true, 'message' => 'Transaksi Berhasil', 'order_id' => $order->id], 201);
+
+            return response()->json([
+                'success' => true,
+                'message' => 'Order berhasil dibuat',
+                'order_id' => $order->id,
+                'snap_token' => $snapToken,
+                'transaction_id' => $transactionId
+            ]);
 
         } catch (\Exception $e) {
-            DB::rollback(); // Batalkan semua perubahan jika ada error
-            return response()->json(['success' => false, 'message' => $e->getMessage()], 400);
+            DB::rollback();
+            return response()->json([
+                'success' => false,
+                'message' => $e->getMessage()
+            ], 400);
         }
     }
 
-    // --- FUNGSI RIWAYAT ORDER ---
+    /**
+     * Get Order History
+     * UPDATE: Menampilkan SEMUA status (termasuk unpaid) agar user bisa bayar ulang.
+     */
     public function history(Request $request)
     {
-        $request->validate(['user_id' => 'required']);
-        $orders = Order::with('details.product')
-                    ->where('user_id', $request->user_id)
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-        return response()->json(['success' => true, 'data' => $orders]);
+        $userId = $request->input('user_id');
+
+        if (!$userId) {
+            return response()->json(['success' => false, 'message' => 'User ID required'], 400);
+        }
+
+        try {
+            $orders = Order::with(['details.product', 'user'])
+                ->where('user_id', $userId)
+                // Kita HAPUS filter '!= unpaid' agar order yang belum dibayar tetap muncul
+                ->orderByDesc('created_at')
+                ->get();
+
+            return response()->json(['success' => true, 'data' => $orders]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
     }
 
-    // --- [ADMIN] LIHAT SEMUA PESANAN ---
+    /**
+     * Check Payment Status (Callback/Sync Midtrans)
+     * UPDATE: Mapping status agar sesuai alur bisnis.
+     * Settlement -> Pending (Sedang Dikemas)
+     */
+    public function checkPaymentStatus($orderId)
+    {
+        try {
+            $order = Order::find($orderId);
+
+            if (!$order || !$order->transaction_id) {
+                return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+            }
+
+            // Setup Midtrans
+            \Midtrans\Config::$serverKey = env('MIDTRANS_SERVER_KEY');
+            \Midtrans\Config::$isProduction = env('MIDTRANS_IS_PRODUCTION', false);
+
+            // Query status ke Midtrans API
+            $status = \Midtrans\Transaction::status($order->transaction_id);
+
+            // LOGIKA UPDATE STATUS:
+
+            // 1. Jika LUNAS (Settlement/Capture) -> Ubah ke 'pending'
+            // Definisi bisnis Anda: 'Pending' = 'Sedang Dikemas' (Masuk Tab Berjalan)
+            if ($status->transaction_status == 'settlement' || $status->transaction_status == 'capture') {
+                $order->status = 'pending';
+                $order->payment_type = $status->payment_type;
+                $order->paid_at = now();
+            }
+            // 2. Jika Masih Menunggu Pembayaran di Midtrans -> Ubah ke 'unpaid'
+            elseif ($status->transaction_status == 'pending') {
+                $order->status = 'unpaid';
+            }
+            // 3. Jika Gagal/Kadaluarsa -> Ubah ke 'batal'
+            elseif (in_array($status->transaction_status, ['deny', 'expire', 'cancel'])) {
+                $order->status = 'batal';
+            }
+
+            $order->save();
+
+            return response()->json([
+                'success' => true,
+                'order' => $order->load(['details.product']),
+                'midtrans_status' => $status->transaction_status
+            ]);
+
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
+
+    // --- FUNGSI ADMIN & LAINNYA (TIDAK DIHAPUS) ---
+
+    public function index()
+    {
+        return response()->json(Order::with('details.product')->get());
+    }
+
     public function indexAdmin()
     {
-        $orders = Order::with(['user', 'details.product'])
-                    ->orderBy('created_at', 'desc')
-                    ->get();
-        return response()->json(['success' => true, 'data' => $orders]);
+        try {
+            $orders = Order::with(['user', 'details.product'])->orderBy('created_at', 'desc')->get();
+            return response()->json($orders, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed', 'message' => $e->getMessage()], 500);
+        }
     }
 
-    // --- [ADMIN] UPDATE STATUS PESANAN ---
-    public function updateStatus(Request $request, $id)
-    {
-        $request->validate(['status' => 'required|in:pending,dibayar,dikirim,selesai,batal']);
-
-        $order = Order::find($id);
-        if (!$order) return response()->json(['success' => false, 'message' => 'Order tidak ditemukan'], 404);
-
-        $order->update(['status' => $request->status]);
-        return response()->json(['success' => true, 'message' => 'Status pesanan berhasil diperbarui']);
-    }
-
-    // --- [ADMIN] DETAIL PESANAN ---
     public function show($id)
     {
-        $order = Order::with(['user', 'details.product'])->find($id);
-        if (!$order) return response()->json(['success' => false], 404);
-        return response()->json(['success' => true, 'data' => $order]);
+        try {
+            $order = Order::with(['user', 'details.product'])->find($id);
+            if (!$order) return response()->json(['error' => 'Not found'], 404);
+            return response()->json($order, 200);
+        } catch (\Exception $e) {
+            return response()->json(['error' => 'Failed', 'message' => $e->getMessage()], 500);
+        }
     }
-    
+
+    public function updateStatus(Request $request, $id)
+    {
+        try {
+            $order = Order::find($id);
+            if (!$order) return response()->json(['success' => false, 'message' => 'Order not found'], 404);
+
+            $validStatuses = ['pending', 'dikirim', 'selesai', 'batal', 'unpaid'];
+            if (!in_array($request->status, $validStatuses)) {
+                return response()->json(['success' => false, 'message' => 'Invalid status'], 400);
+            }
+
+            $order->status = $request->status;
+            $order->save();
+
+            return response()->json(['success' => true, 'message' => 'Status updated', 'data' => $order]);
+        } catch (\Exception $e) {
+            return response()->json(['success' => false, 'message' => $e->getMessage()], 500);
+        }
+    }
 }

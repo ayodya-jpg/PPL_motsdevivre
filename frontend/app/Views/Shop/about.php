@@ -1,206 +1,250 @@
 <!DOCTYPE html>
-<html lang="id" data-bs-theme="dark">
+<html lang="id" data-bs-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= esc($title) ?></title>
-    <!-- Bootstrap 5 CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <!-- FontAwesome Icons (Masih dipakai untuk ikon lain) -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Bootstrap Icons (BARU: Untuk ikon bi-shop) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
     <style>
-        body { transition: background-color 0.3s, color 0.3s; }
-        
-        /* Navigasi Custom */
-        .nav-custom .nav-link { font-size: 0.9rem; display: flex; flex-direction: column; align-items: center; padding: 0.5rem 1rem; opacity: 0.7; }
-        .nav-custom .nav-link:hover, .nav-custom .nav-link.active { opacity: 1; }
-        .nav-custom .nav-link i { font-size: 1.2rem; margin-bottom: 4px; }
-        
-        /* Search Input */
-        .search-input { border: 1px solid rgba(255,255,255,0.2); }
-        [data-bs-theme="light"] .search-input { border: 1px solid #ced4da; background-color: #fff; color: #212529; }
-        [data-bs-theme="dark"] .search-input { background-color: #2b3035; color: #fff; border-color: #495057; }
-        
-        /* Profile/Shop Card Style */
-        .profile-header {
-            /* Menggunakan warna hijau/biru toko */
-            background: linear-gradient(135deg, #198754, #0d6efd);
-            height: 150px;
-            border-radius: 8px 8px 0 0;
+        :root {
+            --primary-slate: #0f172a;
+            --accent-amber: #fbbf24;
+            --bg-light: #f8fafc;
+            --card-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.08);
         }
-        .profile-img-container {
-            width: 140px;
-            height: 140px;
-            border-radius: 50%;
-            border: 5px solid;
-            margin-top: -70px;
-            background: white;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: var(--bg-light);
+            color: var(--primary-slate);
+            transition: all 0.3s ease;
+        }
+
+        /* --- MODERN NAVIGATION (Glassmorphism) --- */
+        .double-header {
+            background: rgba(255, 255, 255, 0.8) !important;
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(0,0,0,0.05);
+        }
+
+        .brand-logo {
+            background: var(--primary-slate);
+            color: var(--accent-amber) !important;
+            width: 40px; height: 40px;
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-weight: 800;
+        }
+
+        .nav-custom .nav-link {
+            font-weight: 600; color: #64748b !important;
+            padding: 0.5rem 1.2rem; border-radius: 12px;
+        }
+
+        .nav-custom .nav-link.active {
+            color: var(--primary-slate) !important;
+            background: rgba(0,0,0,0.03);
+        }
+
+        /* --- ABOUT COMPONENTS --- */
+        .about-card {
+            border: none;
+            border-radius: 35px;
+            background: #ffffff;
+            box-shadow: var(--card-shadow);
             overflow: hidden;
         }
-        [data-bs-theme="dark"] .profile-img-container { border-color: #212529; }
-        [data-bs-theme="light"] .profile-img-container { border-color: #fff; }
-        
-        .social-link {
-            width: 40px; height: 40px;
-            display: inline-flex; align-items: center; justify-content: center;
-            border-radius: 50%;
-            text-decoration: none;
-            margin: 0 5px;
-            font-size: 1.2rem;
-            transition: 0.3s;
+
+        .about-header-bg {
+            background: linear-gradient(135deg, var(--primary-slate) 0%, #334155 100%);
+            height: 180px;
         }
-        .social-link:hover { transform: translateY(-3px); }
+
+        .logo-wrapper {
+            width: 140px; height: 140px;
+            border-radius: 40px;
+            background: white;
+            padding: 8px;
+            margin-top: -70px;
+            display: inline-block;
+            box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+        }
+
+        .logo-img {
+            width: 100%; height: 100%;
+            border-radius: 32px;
+            object-fit: cover;
+        }
+
+        .feature-badge {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            padding: 12px 20px;
+            border-radius: 20px;
+            transition: all 0.3s;
+        }
+
+        .feature-badge:hover {
+            border-color: var(--accent-amber);
+            transform: translateY(-3px);
+            background: white;
+        }
+
+        .btn-theme-toggle {
+            background: #f1f5f9; border: none;
+            padding: 10px 18px; border-radius: 14px;
+        }
+
+        [data-bs-theme="dark"] {
+            --bg-light: #0f172a;
+            --primary-slate: #f8fafc;
+        }
+        [data-bs-theme="dark"] .about-card { background: #1e293b; }
+        [data-bs-theme="dark"] .feature-badge { background: #0f172a; border-color: #334155; }
+        [data-bs-theme="dark"] .double-header { background: rgba(15, 23, 42, 0.9) !important; }
     </style>
 </head>
 <body>
 
-    <!-- HEADER (Sama seperti Index) -->
-    <header class="mb-4 shadow-sm bg-body-tertiary">
-        <div class="header-top py-2 border-bottom border-secondary border-opacity-25">
+    <header class="double-header sticky-top mb-5">
+        <div class="header-top py-3">
             <div class="container d-flex justify-content-between align-items-center">
-                <a class="navbar-brand fw-bold d-flex align-items-center text-decoration-none fs-4" href="/shop">
-                    <span class="bg-warning text-white rounded px-2 me-2 fs-5 d-flex align-items-center justify-content-center" style="width: 32px; height: 32px;">VR</span> 
-                    <span class="text-body">Mots De Vivre</span>
+                <a class="navbar-brand fw-bolder d-flex align-items-center text-decoration-none fs-4" href="/shop">
+                    <div class="brand-logo me-2">DV</div> 
+                    <span class="text-body tracking-tighter">Mots De Vivre</span>
                 </a>
-                <div class="d-flex align-items-center gap-3">
-                    <nav class="nav nav-custom d-none d-md-flex">
-                        <a class="nav-link text-body" href="/shop"><i class="bi bi-house"></i> Home</a>
-                        <?php if (session()->get('is_logged_in')) : ?>
-                            <a class="nav-link position-relative text-body" href="/cart">
-                            <i class="bi bi-bag"></i></i> Cart
-                                <?php if(isset($cart_count) && $cart_count > 0): ?>
-                                    <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;"><?= $cart_count ?></span>
-                                <?php endif; ?>
-                            </a>
-                            <a class="nav-link text-body" href="#"><i class="bi bi-receipt"></i> Orders</a>
-                            <a class="nav-link text-body" href="#"><i class="fas fa-th-large"></i> Products</a>
-                        <?php endif; ?>
-                        
-                        <!-- Link About Me Aktif (IKON DIPERBARUI) -->
-                        <a class="nav-link active text-warning fw-bold" href="/about">
-                            <i class="bi bi-shop"></i> About Mots
-                        </a>
-                    </nav>
 
-                    <button class="btn btn-outline-secondary btn-sm rounded-pill px-3" id="themeToggle">
-                        <i class="fas fa-sun" id="themeIcon"></i>
-                    </button>
+                <div class="d-flex align-items-center gap-2">
+                    <nav class="nav nav-custom d-none d-lg-flex me-3">
+                        <a class="nav-link" href="/shop">Home</a>
+                        <?php if (session()->get('is_logged_in')) : ?>
+                            <a class="nav-link" href="/cart">Cart <span class="badge bg-danger rounded-pill"><?= $cart_count ?? 0 ?></span></a>
+                            <a class="nav-link" href="/orders">Orders</a>
+                            <a class="nav-link" href="/profile">Profile</a>
+                        <?php endif; ?>
+                        <a class="nav-link active" href="/about">About Us</a>
+                    </nav>
+                    <button class="btn-theme-toggle" id="themeToggle"><i class="fas fa-sun" id="themeIcon"></i></button>
+                    <button class="btn btn-outline-secondary border-0 d-lg-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#mobileMenu"><i class="fas fa-bars"></i></button>
                 </div>
             </div>
         </div>
     </header>
 
-    <!-- KONTEN UTAMA: ABOUT TOKO -->
-    <div class="container pb-5">
+    <div class="collapse border-top border-secondary bg-body shadow-sm d-lg-none sticky-top" id="mobileMenu" style="top: 80px; z-index: 1040;">
+        <div class="container py-3">
+            <a href="/shop" class="d-block py-2 text-decoration-none text-body fw-bold">Home</a>
+            <a href="/about" class="d-block py-2 text-decoration-none text-warning fw-bold">About Us</a>
+            <?php if (session()->get('is_logged_in')) : ?>
+                <a href="/cart" class="d-block py-2 text-decoration-none text-body">Cart</a>
+                <a href="/orders" class="d-block py-2 text-decoration-none text-body">Orders</a>
+                <a href="/profile" class="d-block py-2 text-decoration-none text-body">Profile</a>
+            <?php endif; ?>
+        </div>
+    </div>
+
+    <div class="container pb-5 mt-4">
         <div class="row justify-content-center">
-            <div class="col-md-8 col-lg-6">
-                
-                <div class="card border-0 shadow-lg text-center h-100">
-                    <!-- Background Header -->
-                    <div class="profile-header"></div>
+            <div class="col-lg-9">
+                <div class="about-card">
+                    <div class="about-header-bg"></div>
                     
-                    <div class="card-body">
-                        <!-- Ikon Toko (Diganti Image) -->
-                        <div class="d-flex justify-content-center">
-                            <div class="profile-img-container shadow">
-                                <!-- URL Logo Toko (Diubah ke gambar lokal) -->
-                                <img src="<?= base_url('images/logo_toko.png') ?>" alt="Logo Toko" style="width: 100%; height: 100%; object-fit: cover;">
+                    <div class="card-body px-4 px-md-5 pb-5 text-center">
+                        <div class="logo-wrapper">
+                            <img src="<?= base_url('images/logo_toko.jpeg') ?>" class="logo-img" alt="Logo Mots">
+                        </div>
+
+                        <h1 class="fw-800 mt-4 mb-2">Mots De Vivre</h1>
+                        <p class="text-muted mb-5 italic font-monospace">"Kesegaran dari Aroma, Kebahagiaan untuk sekitar"</p>
+
+                        <div class="row g-3 mb-5">
+                            <div class="col-md-4">
+                                <div class="feature-badge">
+                                    <i class="fas fa-spray-can text-warning fs-4 mb-2 d-block"></i>
+                                    <span class="fw-bold small">Extrait De Parfume</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-badge">
+                                    <i class="fas fa-award text-primary fs-4 mb-2 d-block"></i>
+                                    <span class="fw-bold small">Kualitas Premium</span>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="feature-badge">
+                                    <i class="fas fa-truck-fast text-success fs-4 mb-2 d-block"></i>
+                                    <span class="fw-bold small">Pengiriman Instan</span>
+                                </div>
                             </div>
                         </div>
-                        
-                        <h2 class="mt-3 fw-bold">Tentang Mots De Vivre</h2>
-                        <p class="text-muted mb-3">Parfume</p>
-                        
-                        <!-- Badges Keunggulan Toko -->
-                        <div class="d-flex justify-content-center mb-4 flex-wrap gap-2">
-                            <span class="badge bg-success bg-opacity-10 text-success border border-success border-opacity-25 py-2 px-3">
-                                <i class="fas fa-check-circle me-1"></i> Produk Original
-                            </span>
-                            <span class="badge bg-primary bg-opacity-10 text-primary border border-primary border-opacity-25 py-2 px-3">
-                                <i class="fas fa-shield-alt me-1"></i> Garansi Resmi
-                            </span>
-                            <span class="badge bg-warning bg-opacity-10 text-warning border border-warning border-opacity-25 py-2 px-3">
-                                <i class="fas fa-truck me-1"></i> Pengiriman Cepat
-                            </span>
-                        </div>
 
-                        <div class="card-text px-4 mb-4 text-start">
-                            <p>
-                                Welcome to <strong>Mots De Vivre</strong>. We are dedicated to help you enjoy for the shopping. 
-                            </p>
-                            <p>
-                            How do you feel when words of life appear in your life? Of course, they can be a source of enthusiasm and motivation to get through the day. 
-                            Mots De Vivre—which means "words of life" in French—is the meaning of life itself.
-
-                            </p>
-                        </div>
-
-                        <hr class="my-4 opacity-25">
-
-                        <!-- Info Kontak -->
-                        <div class="row mb-4">
-                             <div class="col-6">
-                                <div class="p-3 rounded bg-body-tertiary">
-                                    <i class="fas fa-map-marker-alt text-danger fs-4 mb-2"></i>
-                                    <h6 class="fw-bold mb-1">Lokasi</h6>
-                                    <small class="text-muted">Surabaya, Indonesia</small>
+                        <div class="text-start px-md-4">
+                            <div class="row g-5">
+                                <div class="col-md-7">
+                                    <h4 class="fw-800 mb-4 text-primary-slate">Kisah Kami</h4>
+                                    <p class="text-muted leading-relaxed">
+                                        Berawal dari Surabaya, <strong>Mots De Vivre</strong> lahir untuk menjembatani antara kamu dengan cara mengekpreksikan dirimu sendiri
+                                    </p>
+                                    <p class="text-muted leading-relaxed">
+                                        Setiap produk kami telah melalui quality checking dari tim kami agar memastikan parfum kesukaan kamu selalu dalam on point hingga kedepan rumahmu.
+                                    </p>
                                 </div>
-                             </div>
-                             <div class="col-6">
-                                <div class="p-3 rounded bg-body-tertiary">
-                                    <i class="fas fa-envelope text-primary fs-4 mb-2"></i>
-                                    <h6 class="fw-bold mb-1">Email</h6>
-                                    <small class="text-muted">motsdevivre@gmail.com</small>
+                                <div class="col-md-5">
+                                    <div class="p-4 rounded-4" style="background: rgba(251, 191, 36, 0.05); border: 1px dashed var(--accent-amber);">
+                                        <h6 class="fw-bold mb-3"><i class="bi bi-info-circle-fill me-2"></i> Hubungi Kami</h6>
+                                        <div class="mb-3">
+                                            <small class="text-muted d-block uppercase font-bold" style="font-size: 10px;">LOKASI PUSAT</small>
+                                            <span class="fw-bold small">Surabaya, Jawa Timur, Indonesia</span>
+                                        </div>
+                                        <div class="mb-3">
+                                            <small class="text-muted d-block uppercase font-bold" style="font-size: 10px;">EMAIL BISNIS</small>
+                                            <span class="fw-bold small">motsdevivre@gmail.com</span>
+                                        </div>
+                                        <div class="mt-4">
+                                            <a href="#" class="btn btn-warning w-100 rounded-pill fw-bold shadow-sm">
+                                                <i class="fab fa-whatsapp me-2"></i> Chat Admin
+                                            </a>
+                                        </div>
+                                    </div>
                                 </div>
-                             </div>
+                            </div>
                         </div>
-                        
-                        <div class="d-grid gap-2 d-sm-flex justify-content-sm-center">
-                            <a href="/shop" class="btn btn-primary px-4 fw-bold shadow-sm">
-                                <i class="fas fa-shopping-bag me-2"></i> Mulai Belanja
-                            </a>
-                            <a href="#" class="btn btn-outline-secondary px-4 fw-bold">
-                                <i class="fab fa-whatsapp me-2"></i> Chat Admin
+
+                        <hr class="my-5 opacity-10">
+
+                        <div class="d-flex flex-column flex-md-row justify-content-center gap-3">
+                            <a href="/shop" class="btn btn-dark rounded-pill px-5 py-3 fw-bold">
+                                <i class="bi bi-bag-check me-2"></i> Mulai Belanja Sekarang
                             </a>
                         </div>
                     </div>
                 </div>
-
             </div>
         </div>
     </div>
 
-    <!-- SCRIPT TEMA -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        // Dark Mode Logic
         const themeToggleBtn = document.getElementById('themeToggle');
         const themeIcon = document.getElementById('themeIcon');
-        const htmlElement = document.documentElement;
         
-        const currentTheme = localStorage.getItem('theme') || 'dark';
-        setTheme(currentTheme);
-
         themeToggleBtn.addEventListener('click', () => {
-            const newTheme = htmlElement.getAttribute('data-bs-theme') === 'dark' ? 'light' : 'dark';
-            setTheme(newTheme);
+            const isDark = document.documentElement.getAttribute('data-bs-theme') === 'dark';
+            const newTheme = isDark ? 'light' : 'dark';
+            document.documentElement.setAttribute('data-bs-theme', newTheme);
+            themeIcon.className = isDark ? 'fas fa-moon' : 'fas fa-sun';
             localStorage.setItem('theme', newTheme);
         });
 
-        function setTheme(theme) {
-            htmlElement.setAttribute('data-bs-theme', theme);
-            if (theme === 'dark') {
-                themeIcon.classList.remove('fa-moon');
-                themeIcon.classList.add('fa-sun');
-            } else {
-                themeIcon.classList.remove('fa-sun');
-                themeIcon.classList.add('fa-moon');
-            }
-        }
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        themeIcon.className = savedTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
     </script>
 </body>
 </html>

@@ -7,7 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Models\EggPrice;
 use Illuminate\Http\Request;
 
-class EggPriceController extends Controller
+class PriceController extends Controller
 {
     // GET /api/egg-prices?plan_name=Paket%20Hemat&days=7
     public function history(Request $request)

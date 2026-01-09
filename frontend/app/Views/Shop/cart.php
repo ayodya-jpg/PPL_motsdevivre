@@ -178,7 +178,7 @@
                         <div class="cart-item-card p-4 mb-3">
                             <div class="d-flex align-items-center gap-4 flex-wrap flex-md-nowrap">
                                 <div class="bg-light rounded-4 d-flex align-items-center justify-content-center" style="min-width: 100px; height: 100px;">
-                                    <i class="fas fa-egg text-muted opacity-50 fs-2"></i>
+                                    <i class="fas fa-spray-can text-muted opacity-50 fs-2"></i>
                                 </div>
                                 
                                 <div class="flex-grow-1">

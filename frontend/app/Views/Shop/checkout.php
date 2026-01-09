@@ -10,7 +10,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
-    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-IoyLJLDukf-pHuqF"></script>
+    <script src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="Mid-client-K-0can14kqPvOh0f"></script>
 
     <style>
         :root {
@@ -200,7 +200,7 @@
                         <?php foreach($cart as $item): ?>
                             <div class="d-flex align-items-center gap-3 mb-3 pb-3 border-bottom border-white border-opacity-10">
                                 <div class="bg-white bg-opacity-10 rounded-3 p-2">
-                                    <i class="fas fa-egg text-amber" style="color:var(--accent-amber)"></i>
+                                    <i class="fas fa-spray-can text-amber" style="color:var(--accent-amber)"></i>
                                 </div>
                                 <div class="flex-grow-1">
                                     <h6 class="small fw-bold mb-0 text-white"><?= esc($item['nama']) ?></h6>
